@@ -93,4 +93,7 @@ class PlagiatController extends Controller
             'raw_response' => $data,
         ]);
     }
+    function add(){
+        return View("add.index");
+    }
 }
