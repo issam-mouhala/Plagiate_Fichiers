@@ -21,7 +21,7 @@ class PlagiatController extends Controller
     {
         // 1. Valider
         $r->validate([
-            'submission' => 'required|file|max:10240',
+            'submission' => 'required|file|max:20240',
             'file_type'  => 'nullable|string|in:text,code,auto',
         ]);
 
@@ -37,7 +37,7 @@ class PlagiatController extends Controller
 
         // 3. Envoyer le fichier à l'API
         try {
-            $response = Http::timeout(120)->attach(
+            $response = Http::timeout(300)->attach(
                 'file',
                 $file->get(),
                 $file->getClientOriginalName()

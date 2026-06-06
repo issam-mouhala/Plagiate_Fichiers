@@ -6,23 +6,21 @@ Route::get('/accueil',PlagiatController::class."@index")->name("accueil.index");
 Route::get('/',PlagiatController::class."@index")->name("accueil.index");
 Route::get('/upload',PlagiatController::class."@upload")->name("upload.index");
 Route::post('/analyse',PlagiatController::class."@analyse")->name("analyse.index");
-Route::get('/ajouter',PlagiatController::class."@create")->name("create.index");
-Route::post('/ajouter',PlagiatController::class."@store")->name("store.index");
-Route::get('/add/{name}', function (Request $request,$cheminVersFichier) {
+Route::get('/reference/ajouter',PlagiatController::class."@create")->name("create.index");
+Route::post('/reference/ajouter',PlagiatController::class."@store")->name("store.index");
+Route::get('/zip/{name}', function (Request $request,$cheminVersFichier) {
 
 
-    $response = Http::attach(
-        'file',                       // nom du champ attendu par Python
-        file_get_contents("C:\Users\Any\OneDrive\Desktop\laravel\learn\public\\fils\\".$cheminVersFichier),
-        'mon_fichier.py'              // nom original
-    )->post('http://localhost:5000/api/add', [
-        'file_type' => 'text',       // ou 'text'
-        'metadata'  => json_encode([ // optionnel
-            'auteur' => 'Prof Martin',
-            'cours'  => 'Algorithmique'
-        ])
-    ]);
-dd($response);
+    $response = Http::timeout(120)->attach(
+       'file',
+       fopen("C:\Users\Any\OneDrive\Desktop\laravel\learn\public\\fils\\". $cheminVersFichier, 'r'),
+       $cheminVersFichier
+   )->post('http://localhost:5000/api/check-zip', [
+       'cross_compare'     => true,
+       'add_to_database'  => false,
+   ]);
+
+   dd($response->json());
     if ($response->successful()) {
         $id = $response->json()['id'];
         echo "Fichier ajouté avec l'ID : $id";

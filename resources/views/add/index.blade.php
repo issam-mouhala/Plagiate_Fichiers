@@ -80,7 +80,7 @@
                         <div id="dropZone" class="upload-area">
                             <i class="bi bi-cloud-upload fs-1 text-secondary"></i>
                             <p class="mt-2 mb-1">Glissez-déposez un fichier ou <strong>cliquez</strong></p>
-                            <p class="text-muted small">Formats : .txt, .py, .java, .cpp, .js, .php, .pdf, .docx ,.zip (max 5 Mo)</p>
+                            <p class="text-muted small">Formats : .txt, .py, .java, .cpp, .js, .php, .pdf, .docx ,.zip (max 50 Mo)</p>
                             <input type="file" id="fileInput" name="file" accept=".txt,.py,.java,.cpp,.js,.php,.pdf,.docx" style="display: none;">
                         </div>
                         <div id="fileInfo" class="mt-2 text-center"></div>
@@ -172,7 +172,7 @@
         }
 
         function handleFile(file) {
-            const maxSize = 5 * 1024 * 1024;
+            const maxSize = 20 * 1024 * 1024;
             const allowedExt = ['txt', 'py', 'java', 'cpp', 'js', 'php', 'pdf', 'docx',"zip"];
             const ext = file.name.split('.').pop().toLowerCase();
             if (!allowedExt.includes(ext)) {

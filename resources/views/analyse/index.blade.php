@@ -151,7 +151,7 @@
 
         /* ===== MAIN LAYOUT ===== */
         .ps-main {
-            max-width: 1140px;
+            width : 1896px;
             margin: 0 auto;
             padding: 2rem 1rem 4rem;
         }
@@ -765,7 +765,7 @@
                     <i class="bi bi-file-earmark-bar-graph"></i> Rapport d'analyse
                 </span>
                 <span class="nav-meta d-none d-sm-inline">
-                    <i class="bi bi-clock me-1"></i>{{ now()->format('d/m/Y \&agrave; H:i') }}
+                    <i class="bi bi-clock me-1"></i>{{ now()->format('d/m/Y  H:i') }}
                 </span>
             </div>
         </div>
@@ -886,7 +886,7 @@
                         @php
                             $imgConf = ($imgMatch['confidence'] ?? 0) * 100;
                             $imgColor = $imgConf >= 80 ? '#dc2626' : ($imgConf >= 60 ? '#f97316' : '#3b82f6');
-                            $imgLevelLabels = ['critical' => 'Critique', 'high' => '&Eacute;lev&eacute;', 'medium' => 'Moyen', 'low' => 'Faible'];
+                            $imgLevelLabels = ['critical' => 'Critique', 'high' => 'Élevé', 'medium' => 'Moyen', 'low' => 'Faible'];
                         @endphp
                         <div class="ps-image-card">
                             <div class="d-flex align-items-center gap-3 flex-wrap">
@@ -895,7 +895,8 @@
                                     <strong style="font-size: 0.82rem;">Image #{{ ($imgMatch['new_image_index'] ?? 0) + 1 }}</strong>
                                     <br>
                                     <small class="text-muted" style="font-size: 0.7rem;">
-                                        vs {{ $imgMatch['matched_filename'] ?? 'R&eacute;f&eacute;rence' }}
+                                        vs
+                                        {{ $imgMatch['matched_filename'] ?? html_entity_decode('R&eacute;f&eacute;rence') }}
                                         &bull; {{ $imgLevelLabels[$imgMatch['level'] ?? 'low'] ?? ucfirst($imgMatch['level'] ?? 'low') }}
                                         @if(isset($imgMatch['phash_distance']))
                                             &bull; pHash: {{ $imgMatch['phash_distance'] }}

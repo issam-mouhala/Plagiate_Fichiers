@@ -100,8 +100,14 @@
     }
   </style>
 </head>
-<body>
 
+<body>
+<!-- /resources/views/post/create.blade.php -->
+
+
+
+
+<!-- Create Post Form -->
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-lg-8 col-md-10">
@@ -126,7 +132,7 @@
             <div id="dropZone" class="upload-area">
               <i class="bi bi-file-earmark-code fs-1 text-secondary"></i>
               <p class="mt-2 mb-1">Glissez-déposez votre fichier ici ou <strong>cliquez pour parcourir</strong></p>
-              <p class="text-muted small mb-0">Formats acceptés : .txt, .py, .java, .cpp, .js, .php, .docx, .pdf (max 5 Mo)</p>
+              <p class="text-muted small mb-0">Formats acceptés : .txt, .py, .java, .cpp, .js, .php, .docx, .pdf (max 20 Mo)</p>
               <input type="file" id="fileInput" name="submission" accept=".txt,.py,.java,.cpp,.js,.php,.docx,.pdf" style="display: none;">
             </div>
             <div id="fileNameDisplay" class="file-name mt-2 text-center"></div>
@@ -223,7 +229,7 @@
   });
 
   function handleFileSelect(file) {
-    const maxSize = 5 * 1024 * 1024; // 5 Mo
+    const maxSize = 200 * 1024 * 1024; // 5 Mo
     const allowedTypes = ['text/plain', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/x-python', 'text/x-java', 'text/javascript', 'text/x-c++src', 'application/x-php'];
     // Vérification extension (plus souple)
     const ext = file.name.split('.').pop().toLowerCase();
