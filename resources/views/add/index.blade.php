@@ -72,7 +72,7 @@
                     <p class="text-muted">Enrichissez la base de détection avec un fichier texte ou du code source.</p>
                 </div>
 
-                <form id="uploadForm" enctype="multipart/form-data">
+                <form id="uploadForm" enctype="multipart/form-data" action="{{route('store.index')}}" method="POST">
                     @csrf
                     <!-- Zone de drop -->
                     <div class="mb-4">
@@ -80,7 +80,7 @@
                         <div id="dropZone" class="upload-area">
                             <i class="bi bi-cloud-upload fs-1 text-secondary"></i>
                             <p class="mt-2 mb-1">Glissez-déposez un fichier ou <strong>cliquez</strong></p>
-                            <p class="text-muted small">Formats : .txt, .py, .java, .cpp, .js, .php, .pdf, .docx (max 5 Mo)</p>
+                            <p class="text-muted small">Formats : .txt, .py, .java, .cpp, .js, .php, .pdf, .docx ,.zip (max 5 Mo)</p>
                             <input type="file" id="fileInput" name="file" accept=".txt,.py,.java,.cpp,.js,.php,.pdf,.docx" style="display: none;">
                         </div>
                         <div id="fileInfo" class="mt-2 text-center"></div>
@@ -173,7 +173,7 @@
 
         function handleFile(file) {
             const maxSize = 5 * 1024 * 1024;
-            const allowedExt = ['txt', 'py', 'java', 'cpp', 'js', 'php', 'pdf', 'docx'];
+            const allowedExt = ['txt', 'py', 'java', 'cpp', 'js', 'php', 'pdf', 'docx',"zip"];
             const ext = file.name.split('.').pop().toLowerCase();
             if (!allowedExt.includes(ext)) {
                 fileError.textContent = 'Format non supporté.';
@@ -214,7 +214,7 @@
         });
         resetBtn.addEventListener('click', () => resetUI());
 
-        form.addEventListener('submit', async (e) => {
+      /*  form.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!selectedFile) {
                 showToast('Veuillez sélectionner un fichier.', true);
@@ -238,7 +238,7 @@
                 // Appel à l'API Python /add (ou via un contrôleur Laravel qui relaye)
                 // Ici, on appelle directement l'API Python (attention CORS)
                 // Si vous voulez passer par Laravel, remplacez l'URL par '/api/add-reference'
-                const response = await axios.post('http://localhost:8000/add', formData, {
+                const response = await axios.post('http://localhost:5000/api/add', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
                 if (response.data.status === 'added') {
@@ -254,7 +254,7 @@
                 if (error.response && error.response.data && error.response.data.detail) msg = error.response.data.detail;
                 showToast(msg, true);
             }
-        });
+        });*/
     })();
 </script>
 </body>

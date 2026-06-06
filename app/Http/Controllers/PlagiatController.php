@@ -93,7 +93,28 @@ class PlagiatController extends Controller
             'raw_response' => $data,
         ]);
     }
-    function add(){
+    function create(){
+        return View("add.index");
+    }
+    function store(Request $r){
+   // 3. Envoyer le fichier à l'API
+
+     $response = Http::attach(
+            'file',                       // nom du champ attendu par Python
+            file_get_contents($r->file->path()),
+            $r->file->getClientOriginalName()              // nom original
+        )->post('http://localhost:5000/api/add', [
+            'file_type' => 'auto',       // ou 'text'
+            'metadata'  => json_encode([ // optionnel
+                'auteur' => 'Prof Martin',
+                'cours'  => 'Algorithmique'
+            ])
+             ]);
+    dd($response);
+        if ($response->successful()) {
+            $id = $response->json()['id'];
+            echo "Fichier ajouté avec l'ID : $id";
+        }
         return View("add.index");
     }
 }

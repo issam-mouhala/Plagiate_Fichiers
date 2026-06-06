@@ -6,7 +6,8 @@ Route::get('/accueil',PlagiatController::class."@index")->name("accueil.index");
 Route::get('/',PlagiatController::class."@index")->name("accueil.index");
 Route::get('/upload',PlagiatController::class."@upload")->name("upload.index");
 Route::post('/analyse',PlagiatController::class."@analyse")->name("analyse.index");
-Route::get('/add',PlagiatController::class."@add")->name("add.index");
+Route::get('/ajouter',PlagiatController::class."@create")->name("create.index");
+Route::post('/ajouter',PlagiatController::class."@store")->name("store.index");
 Route::get('/add/{name}', function (Request $request,$cheminVersFichier) {
 
 
