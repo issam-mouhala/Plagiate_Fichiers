@@ -91,7 +91,7 @@
         <li class="nav-item"><a class="nav-link" href="#">Fonctionnalités</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Tarifs</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-        <li class="nav-item ms-lg-3"><a class="btn btn-outline-light btn-sm" href="#">Connexion</a></li>
+        <li class="nav-item ms-lg-3"><a class="btn btn-outline-light btn-sm" href="{{route('login')}}">Connexion</a></li>
       </ul>
     </div>
   </div>

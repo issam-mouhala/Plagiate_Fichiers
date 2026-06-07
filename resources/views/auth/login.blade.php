@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription | PlagioScan</title>
+    <title>Connexion | PlagioScan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,22 +17,24 @@
             justify-content: center;
             padding: 1rem;
         }
-        .card-register {
+        .card-login {
             border: none;
             border-radius: 2rem;
+            backdrop-filter: blur(2px);
             background: rgba(255, 255, 255, 0.98);
             box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
             transition: transform 0.3s;
         }
-        .card-register:hover { transform: translateY(-5px); }
-        .btn-register {
+        .card-login:hover { transform: translateY(-5px); }
+        .btn-login {
             background: linear-gradient(95deg, #1e6fdf 0%, #0a4c8f 100%);
             border: none;
             padding: 12px;
             border-radius: 40px;
             font-weight: 600;
+            transition: 0.2s;
         }
-        .btn-register:hover {
+        .btn-login:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(30,111,223,0.4);
         }
@@ -53,52 +55,53 @@
             align-items: center;
             justify-content: center;
             border-radius: 60px;
-            font-size: 1.8rem;
             color: #1e6fdf;
+            font-size: 1.8rem;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8">
-            <div class="card-register p-4 p-md-5">
+        <div class="col-lg-5 col-md-7">
+            <div class="card-login p-4 p-md-5">
                 <div class="text-center mb-4">
-                    <div class="icon-bg mx-auto mb-3"><i class="bi bi-person-plus"></i></div>
-                    <h1 class="fw-bold" style="color: #0B2B5E;">Inscription</h1>
-                    <p class="text-muted">Créez votre compte PlagioScan</p>
+                    <div class="icon-bg mx-auto mb-3">
+                        <i class="bi bi-shield-shaded"></i>
+                    </div>
+                    <h1 class="fw-bold" style="color: #0B2B5E;">PlagioScan</h1>
+                    <p class="text-muted">Connectez-vous à votre espace</p>
                 </div>
 
                 @if(session('success'))
                     <div class="alert alert-success rounded-pill">{{ session('success') }}</div>
                 @endif
 
-                <form method="POST" action="{{ route('accueil.register') }}">
+                <form method="POST" action="{{ route('auth.login') }}">
                     @csrf
                     <div class="mb-3">
-                        <label class="form-label fw-semibold"><i class="bi bi-person me-2"></i>Nom complet</label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required autofocus>
-                        @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
-                    <div class="mb-3">
                         <label class="form-label fw-semibold"><i class="bi bi-envelope me-2"></i>Email</label>
-                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required>
-                        @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required autofocus>
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold"><i class="bi bi-lock me-2"></i>Mot de passe</label>
                         <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required>
-                        @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        @error('password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold"><i class="bi bi-lock-fill me-2"></i>Confirmer le mot de passe</label>
-                        <input type="password" name="password_confirmation" class="form-control" required>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" name="remember" id="remember">
+                        <label class="form-check-label" for="remember">Se souvenir de moi</label>
                     </div>
-                    <button type="submit" class="btn btn-register w-100 text-white"><i class="bi bi-check-circle me-2"></i>S'inscrire</button>
+                    <button type="submit" class="btn btn-login w-100 text-white"><i class="bi bi-box-arrow-in-right me-2"></i>Se connecter</button>
                 </form>
 
                 <div class="text-center mt-4">
-                    <p class="mb-0">Déjà inscrit ? <a href="{{ route('accueil.login') }}" class="text-primary fw-semibold text-decoration-none">Connectez-vous</a></p>
+                    <p class="mb-0">Pas encore de compte ? <a href="{{ route('register') }}" class="text-primary fw-semibold text-decoration-none">Inscrivez-vous</a></p>
                 </div>
             </div>
         </div>

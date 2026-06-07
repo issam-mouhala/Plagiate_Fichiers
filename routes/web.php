@@ -2,12 +2,21 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlagiatController;
-Route::get('/accueil',PlagiatController::class."@index")->name("accueil.index");
-Route::get('/login',PlagiatController::class."@login")->name("accueil.login");
-Route::post('/login',PlagiatController::class."@login")->name("accueil.login");
-Route::get('/register',PlagiatController::class."@register")->name("accueil.register");
-Route::post('/register',PlagiatController::class."@register")->name("accueil.register");
+use App\Http\Controllers\AuthController;
+
 Route::get('/',PlagiatController::class."@index")->name("accueil.index");
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::middleware('guest')->group(function () {
+Route::get('/auth/login',AuthController::class."@showLoginForm")->name("login");
+Route::post('/login',AuthController::class."@login")->name("auth.login");
+Route::get('/register',AuthController::class."@showRegisterForm")->name("register");
+Route::post('/register',AuthController::class."@register")->name("auth.register");
+
+});
+
+Route::middleware('auth')->group(function () {
+Route::get('/accueil',PlagiatController::class."@index")->name("accueil.index");
 Route::get('/upload',PlagiatController::class."@upload")->name("upload.index");
 Route::post('/analyse',PlagiatController::class."@analyse")->name("analyse.index");
 Route::get('/reference/ajouter',PlagiatController::class."@create")->name("create.index");
@@ -54,3 +63,7 @@ Route::get('/zip/{name}', function (Request $request,$cheminVersFichier) {
     // JSON brut
     'raw_response'     => $data,
 ]);});
+Route::get('/dashboard', function () {
+    return view('auth.dashboard');
+})->name('dashboard');
+});
