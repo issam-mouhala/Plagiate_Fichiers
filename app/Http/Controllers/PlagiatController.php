@@ -117,4 +117,10 @@ class PlagiatController extends Controller
         }
         return View("add.index");
     }
+    function login(){
+        return view("accueil.login");
+    }
+    function register(){
+        return view("accueil.register");
+    }
 }
