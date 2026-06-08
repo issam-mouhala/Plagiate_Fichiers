@@ -36,7 +36,7 @@ Route::get('/zip/{name}', function (Request $request,$cheminVersFichier) {
    $data  = $response->json();
 
    $d     = $data['data'] ?? [];
-
+//dd($d);
    return view("analyse.analyse_zip", [
     // Archive
     'zip_filename'     => $d['filename'] ?? $file->getClientOriginalName(),

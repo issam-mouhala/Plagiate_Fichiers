@@ -63,7 +63,6 @@ class PlagiatController extends Controller
                 $enginesUsed[$name] = true;
             }
         }
-
         // 6. Envoyer à la vue
         return view("analyse.index", [
             // Fichier

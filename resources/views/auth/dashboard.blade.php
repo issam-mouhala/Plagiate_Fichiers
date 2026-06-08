@@ -1,16 +1,3 @@
-<!--
-<div class="container">
-    <div class="card">
-        <div class="card-header">Tableau de bord</div>
-        <div class="card-body">
-            <p>Bienvenue, {{ Auth::user()->name }} !</p>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="btn btn-danger">Déconnexion</button>
-            </form>
-        </div>
-    </div>
-</div>-->
 <!DOCTYPE html>
 <html lang="fr" data-bs-theme="light">
 <head>
@@ -294,6 +281,17 @@
             .sidebar.show { transform: translateX(0); }
             .main-content { margin-left: 0; }
         }
+        .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90vh; /* ou 100% selon ta sidebar */
+}
+
+.logout-section {
+    padding: 15px;
+    border-top: 1px solid #e5e7eb;
+}
     </style>
 </head>
 <body>
@@ -320,24 +318,38 @@
         </div>
     </div>
     <div class="sidebar-nav">
-        <div class="nav-section-title">Principal</div>
-        <a href="#" class="nav-link active" data-page="dashboard" onclick="showPage('dashboard')">
-            <i class="fas fa-chart-pie"></i> Dashboard
-        </a>
-        <a href="#" class="nav-link" data-page="upload" onclick="showPage('upload')">
-            <i class="fas fa-cloud-arrow-up"></i> Analyser un fichier
-        </a>
-        <a href="#" class="nav-link" data-page="upload-zip" onclick="showPage('upload-zip')">
-            <i class="fas fa-file-zipper"></i> Analyser un ZIP
-        </a>
-        <div class="nav-section-title">Base de donnees</div>
-        <a href="#" class="nav-link" data-page="database" onclick="showPage('database')">
-            <i class="fas fa-database"></i> Corpus
-        </a>
-        <div class="nav-section-title">Systeme</div>
-        <a href="#" class="nav-link" data-page="settings" onclick="showPage('settings')">
-            <i class="fas fa-gear"></i> Configuration
-        </a>
+        <div>
+            <div class="nav-section-title">Principal</div>
+            <a href="#" class="nav-link active" data-page="dashboard" onclick="showPage('dashboard')">
+                <i class="fas fa-chart-pie"></i> Dashboard
+            </a>
+            <a href="#" class="nav-link" data-page="upload" onclick="showPage('upload')">
+                <i class="fas fa-cloud-arrow-up"></i> Analyser un fichier
+            </a>
+            <a href="#" class="nav-link" data-page="upload-zip" onclick="showPage('upload-zip')">
+                <i class="fas fa-file-zipper"></i> Analyser un ZIP
+            </a>
+
+            <div class="nav-section-title">Base de données</div>
+            <a href="#" class="nav-link" data-page="database" onclick="showPage('database')">
+                <i class="fas fa-database"></i> Corpus
+            </a>
+
+            <div class="nav-section-title">Système</div>
+            <a href="#" class="nav-link" data-page="settings" onclick="showPage('settings')">
+                <i class="fas fa-gear"></i> Configuration
+            </a>
+        </div>
+
+        <!-- Logout en bas -->
+        <div class="logout-section">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-danger w-100">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </button>
+            </form>
+        </div>
     </div>
 </nav>
 
