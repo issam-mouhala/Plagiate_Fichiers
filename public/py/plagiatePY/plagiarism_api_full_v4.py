@@ -976,7 +976,15 @@ def add_submission(filename, content, file_type, metadata=None,
     subs.append(sub)
     save_submissions(subs)
     return sub["id"]
-
+# ===========================================================================
+#  AUTO-LOAD SEMANTIC MODEL AT STARTUP
+# ===========================================================================
+print("[STARTUP] Chargement du modèle semantic...")
+_sem = get_semantic_model()
+if _sem is not None:
+    print("[STARTUP] ✓ Modèle semantic chargé avec succès")
+else:
+    print("[STARTUP] ✗ Modèle semantic NON disponible — installez sentence-transformers")
 
 # ===========================================================================
 # 16. ENDPOINTS — JSON pour Laravel
