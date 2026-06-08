@@ -371,6 +371,9 @@
             .per-file-matches-wrap { max-height: none !important; }
             .raw-json-section { display: none; }
         }
+        a{
+            text-decoration: none
+        }
     </style>
 </head>
 <body>
@@ -382,16 +385,16 @@
             <div class="report-header">
                 <div class="brand">
                     <div class="brand-icon"><i class="bi bi-shield-shaded"></i></div>
-                    <div>
+                    <a  href="{{route("accueil.index")}} ">
                         <div class="brand-name">PlagioScan</div>
                         <div style="font-size: 0.72rem; color: var(--muted); font-weight: 500;">Moteur de d&eacute;tection anti-plagiat</div>
-                    </div>
+                    </a>
                 </div>
                 <div>
                     <span class="report-badge zip-badge"><i class="bi bi-file-earmark-zip"></i> Analyse ZIP</span>
                     <span class="report-badge analysis-badge" style="margin-left:0.4rem;"><i class="bi bi-bar-chart-line"></i> Rapport</span>
                     <div class="report-meta" style="margin-top: 0.5rem;">
-                        <span><i class="bi bi-clock me-1"></i>{{ now()->format('d/m/Y \&agrave; H:i') }}</span>
+                        <span><i class="bi bi-clock me-1"></i>{{ now()->format('d/m/Y ; H:i') }}</span>
                     </div>
                 </div>
             </div>

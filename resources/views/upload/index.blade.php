@@ -230,10 +230,10 @@
 
   function handleFileSelect(file) {
     const maxSize = 200 * 1024 * 1024; // 5 Mo
-    const allowedTypes = ['text/plain', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/x-python', 'text/x-java', 'text/javascript', 'text/x-c++src', 'application/x-php'];
+    const allowedTypes = ['text/plain', 'application/pdf','application/image', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/x-python', 'text/x-java', 'text/javascript', 'text/x-c++src', 'application/x-php'];
     // Vérification extension (plus souple)
     const ext = file.name.split('.').pop().toLowerCase();
-    const allowedExt = ['txt', 'py', 'java', 'cpp', 'c', 'js', 'php', 'pdf', 'docx'];
+    const allowedExt = ['txt', 'py', 'java', 'cpp', 'c', 'js', 'php', 'pdf', 'docx',"png"];
     if (!allowedExt.includes(ext)) {
       showError('Format non supporté. Utilisez .txt, .py, .java, .cpp, .js, .php, .pdf, .docx');
       resetFileSelection();

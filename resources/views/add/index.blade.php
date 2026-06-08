@@ -173,7 +173,7 @@
 
         function handleFile(file) {
             const maxSize = 20 * 1024 * 1024;
-            const allowedExt = ['txt', 'py', 'java', 'cpp', 'js', 'php', 'pdf', 'docx',"zip"];
+            const allowedExt = ['txt', 'py', 'java', 'cpp', 'js', 'php', 'pdf', 'docx',"zip",'png','jpg','jpge'];
             const ext = file.name.split('.').pop().toLowerCase();
             if (!allowedExt.includes(ext)) {
                 fileError.textContent = 'Format non supporté.';
