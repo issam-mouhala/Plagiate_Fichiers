@@ -151,7 +151,7 @@
 
         /* ===== MAIN LAYOUT ===== */
         .ps-main {
-            width : 1896px;
+            width : 76vw;
             margin: 0 auto;
             padding: 2rem 1rem 4rem;
         }

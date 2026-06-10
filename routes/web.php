@@ -3,12 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlagiatController;
 use App\Http\Controllers\AuthController;
+use Illuminate\Http\Request;
 
 Route::get('/',PlagiatController::class."@index")->name("accueil.index");
+Route::get('/base',PlagiatController::class."@base");
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 Route::middleware('guest')->group(function () {
-Route::get('/auth/login',AuthController::class."@showLoginForm")->name("login");
+Route::get('/login',AuthController::class."@showLoginForm")->name("login");
 Route::post('/login',AuthController::class."@login")->name("auth.login");
 Route::get('/register',AuthController::class."@showRegisterForm")->name("register");
 Route::post('/register',AuthController::class."@register")->name("auth.register");
@@ -21,20 +23,19 @@ Route::get('/upload',PlagiatController::class."@upload")->name("upload.index");
 Route::post('/analyse',PlagiatController::class."@analyse")->name("analyse.index");
 Route::get('/reference/ajouter',PlagiatController::class."@create")->name("create.index");
 Route::post('/reference/ajouter',PlagiatController::class."@store")->name("store.index");
-Route::get('/zip/{name}', function (Request $request,$cheminVersFichier) {
+Route::post('/zip', function (Request $request) {
     set_time_limit(0);
 
 
     $response = Http::timeout(1200)->attach(
        'file',
-       fopen("C:\Users\Any\OneDrive\Desktop\laravel\learn\public\\fils\\". $cheminVersFichier, 'r'),
-       $cheminVersFichier
+       fopen("C:\Users\Any\OneDrive\Desktop\laravel\learn\public\\fils\\". $request->file('submission')->getClientOriginalName(), 'r'),
+       $request->file('submission')->getClientOriginalName()
    )->post('http://localhost:5000/api/check-zip', [
        'cross_compare'     => true,
        'add_to_database'  => false,
    ]);
    $data  = $response->json();
-
    $d     = $data['data'] ?? [];
 //dd($d);
    return view("analyse.analyse_zip", [
@@ -62,7 +63,7 @@ Route::get('/zip/{name}', function (Request $request,$cheminVersFichier) {
 
     // JSON brut
     'raw_response'     => $data,
-]);});
+]);})->name("analyse_zip");
 Route::get('/dashboard', function () {
     return view('auth.dashboard');
 })->name('dashboard');

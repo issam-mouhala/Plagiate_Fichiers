@@ -50,7 +50,7 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
@@ -1808,6 +1808,49 @@ async def api_check_zip(
 
     # === 4. Image analysis ===
     image_matches_all = []
+    # === Save extracted images to disk for dashboard display ===
+    saved_new_images = {}  # {0: "img_new_0_filename_0.png", ...}
+    saved_existing_images = {}  # {"filename_0": "img_ex_filename_0.png", ...}
+    if image_files:
+        img_counter = 0
+        for f in image_files:
+            for local_idx, img in enumerate(f["images"]):
+                try:
+                    safe_base = re.sub(r'[^a-zA-Z0-9._-]', '_', f.get("filename", "unknown"))
+                    safe_name = f"img_new_{img_counter}_{safe_base}_{local_idx}.png"
+                    save_path = os.path.join(IMAGES_DIR, safe_name)
+                    img_rgb = img.convert('RGB') if img.mode != 'RGB' else img
+                    img_rgb.save(save_path, 'PNG')
+                    saved_new_images[img_counter] = safe_name
+                    img_counter += 1
+                except Exception as e:
+                    print(f"[WARN] Save new image {img_counter} failed: {e}")
+    if existing:
+        for s in existing:
+            for img_data in s.get("images", []):
+                try:
+                    safe_base = re.sub(r'[^a-zA-Z0-9._-]', '_', s.get("filename", "unknown"))
+                    img_idx = img_data.get("image_index", 0)
+                    safe_name = f"img_ex_{safe_base}_{img_idx}.png"
+                    save_path = os.path.join(IMAGES_DIR, safe_name)
+                    if not os.path.exists(save_path):
+                        # Try to reconstruct from raw bytes if stored
+                        raw_bytes = img_data.get("image_bytes")
+                        if raw_bytes:
+                            pil = Image.open(io.BytesIO(raw_bytes))
+                            pil_rgb = pil.convert('RGB') if pil.mode != 'RGB' else pil
+                            pil_rgb.save(save_path, 'PNG')
+                        else:
+                            # Create a small placeholder
+                            placeholder = Image.new('RGB', (200, 200), (240, 240, 240))
+                            from PIL import ImageDraw, ImageFont
+                            draw = ImageDraw.Draw(placeholder)
+                            draw.text((10, 90), f"Image: {safe_base}", fill=(100, 100, 100))
+                            placeholder.save(save_path, 'PNG')
+                    saved_existing_images[f"{safe_base}_{img_idx}"] = safe_name
+                except Exception as e:
+                    print(f"[WARN] Save existing image failed: {e}")
+
     if image_files and existing:
         all_new_images = []
         for f in image_files:
@@ -1819,6 +1862,18 @@ async def api_check_zip(
                 all_existing_images.append({**img_data, "filename": s["filename"]})
         if all_new_images and all_existing_images:
             image_matches_all = compare_images(all_new_images, all_existing_images)
+
+    # Attach saved filenames to each match for the dashboard
+    for match in image_matches_all:
+        new_idx = match.get("new_image_index", 0)
+        if new_idx in saved_new_images:
+            match["new_image_src"] = saved_new_images[new_idx]
+        matched_fname = match.get("matched_filename", "")
+        matched_img_idx = match.get("matched_image_index", 0)
+        safe_matched = re.sub(r'[^a-zA-Z0-9._-]', '_', matched_fname)
+        key = f"{safe_matched}_{matched_img_idx}"
+        if key in saved_existing_images:
+            match["matched_image_src"] = saved_existing_images[key]
 
     # === 5. Score global ===
     all_scores = [r["max_score"] for r in per_file_results]
@@ -1853,6 +1908,8 @@ async def api_check_zip(
                 "images_checked": len(image_files),
                 "image_matches": image_matches_all[:10],
                 "max_score": max(img_scores) if img_scores else 0,
+                "saved_new_images": saved_new_images,
+                "saved_existing_images": saved_existing_images,
             },
             "paraphrase_summary": {
                 "total_paraphrases_detected": total_para + cross_para,
@@ -1918,6 +1975,267 @@ async def api_check_paraphrase(
         })
     except Exception as e:
         return JSONResponse(status_code=500, content={"success": False, "message": str(e)})
+
+
+# ===========================================================================
+# 23. SERVE EXTRACTED IMAGES
+# ===========================================================================
+
+@app.get("/api/serve-image/{filename}")
+async def serve_image(filename: str):
+    """
+    Sert une image extraite depuis uploads/images/.
+    Utilise par le dashboard Laravel pour afficher les images comparees.
+    """
+    safe_name = os.path.basename(filename)
+    file_path = os.path.join(IMAGES_DIR, safe_name)
+
+    if not os.path.exists(file_path):
+        return JSONResponse(status_code=404, content={"success": False, "message": "Image non trouvee"})
+
+    real_path = os.path.realpath(file_path)
+    real_dir = os.path.realpath(IMAGES_DIR)
+    if not real_path.startswith(real_dir):
+        return JSONResponse(status_code=403, content={"success": False, "message": "Acces interdit"})
+
+    media_types = {
+        '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+        '.gif': 'image/gif', '.bmp': 'image/bmp', '.webp': 'image/webp',
+    }
+    ext = os.path.splitext(safe_name)[1].lower()
+    return FileResponse(file_path, media_type=media_types.get(ext, 'image/png'))
+
+
+# ===========================================================================
+# 24. ESTIMATION DU TEMPS DE TRAITEMENT
+# ===========================================================================
+
+def estimate_processing_time(file_bytes: bytes, filename: str, is_zip: bool = False,
+                               use_semantic: bool = True, use_paraphrase: bool = True,
+                               cross_compare: bool = True) -> Dict:
+    """
+    Estime le temps de traitement avant l'analyse.
+    Retourne un dict avec estimation détaillée par étape.
+    """
+    t = time.time()
+    estimates = {
+        "extraction": 0.0,
+        "preprocessing": 0.0,
+        "database_comparison": 0.0,
+        "cross_comparison": 0.0,
+        "image_comparison": 0.0,
+        "ml_models": 0.0,
+        "total": 0.0,
+        "details": [],
+    }
+
+    file_size_mb = len(file_bytes) / (1024 * 1024)
+    existing = load_submissions()
+    corpus_size = len(existing)
+
+    # --- ML models loading penalty ---
+    ml_penalty = 0.0
+    if use_semantic and _semantic_model is None:
+        ml_penalty += 5.0  # mpnet ~5s first load
+        estimates["details"].append("Chargement modele semantic (mpnet): ~5s")
+    if use_paraphrase and _paraphrase_model is None:
+        ml_penalty += 3.0  # paraphrase ~3s first load
+        estimates["details"].append("Chargement modele paraphrase: ~3s")
+    if not _ml_model_ready:
+        ml_penalty += 0.5
+        estimates["details"].append("Entrainement ML classifier: ~0.5s")
+    estimates["ml_models"] = round(ml_penalty, 1)
+
+    if not is_zip:
+        # === SINGLE FILE ===
+        ext = os.path.splitext(filename)[1].lower()
+
+        # Extraction
+        if ext == '.pdf':
+            try:
+                with zipfile.ZipFile(io.BytesIO(file_bytes[:1024])):
+                    pass
+            except Exception:
+                pass
+            # Estimate pages from file size
+            est_pages = max(1, int(file_size_mb * 3))  # ~3 pages per MB
+            extraction_time = 0.2 + est_pages * 0.3
+            estimates["details"].append(f"PDF extraction: ~{extraction_time:.1f}s (est. {est_pages} pages)")
+        elif ext == '.docx':
+            extraction_time = 0.3 + file_size_mb * 0.2
+            estimates["details"].append(f"DOCX extraction: ~{extraction_time:.1f}s")
+        elif ext in ('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp'):
+            extraction_time = 0.1
+            estimates["details"].append(f"Image extraction: ~0.1s")
+        else:
+            extraction_time = 0.05 + file_size_mb * 0.02
+            estimates["details"].append(f"Texte/Code extraction: ~{extraction_time:.1f}s")
+        estimates["extraction"] = round(extraction_time, 2)
+
+        # Preprocessing
+        estimates["preprocessing"] = 0.1
+
+        # Database comparison
+        if corpus_size > 0:
+            # Per comparison: TF-IDF(0.01) + Semantic(0.15 cached / 0.5 new) + Winnowing(0.03) + LCS(0.05-0.5)
+            per_comp = 0.08  # average with cache
+            if use_semantic:
+                per_comp += 0.12
+            if use_paraphrase:
+                per_comp += 0.10
+            db_time = corpus_size * per_comp
+            estimates["database_comparison"] = round(db_time, 2)
+            estimates["details"].append(f"Comparaison corpus ({corpus_size} fichiers): ~{db_time:.1f}s")
+
+        # Cross comparison (N/A for single file)
+        estimates["cross_comparison"] = 0.0
+
+        # Image comparison
+        estimates["image_comparison"] = 0.0
+
+    else:
+        # === ZIP FILE ===
+        # Quick scan
+        num_files = 0
+        num_text = 0
+        num_code = 0
+        num_pdf = 0
+        num_docx = 0
+        num_images = 0
+        total_text_size = 0
+
+        try:
+            with zipfile.ZipFile(io.BytesIO(file_bytes)) as zf:
+                for name in zf.namelist():
+                    if name.startswith('__MACOSX') or name.endswith('/'):
+                        continue
+                    num_files += 1
+                    ext = os.path.splitext(name)[1].lower()
+                    if ext in ('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp'):
+                        num_images += 1
+                    elif ext == '.pdf':
+                        num_pdf += 1
+                        num_text += 1
+                    elif ext == '.docx':
+                        num_docx += 1
+                        num_text += 1
+                    elif ext in CODE_EXTS_SET:
+                        num_code += 1
+                    elif ext in TEXT_EXTS_SET or ext not in IMAGE_EXTS_SET | DOC_EXTS_SET:
+                        num_text += 1
+                    try:
+                        info = zf.getinfo(name)
+                        total_text_size += info.file_size
+                    except Exception:
+                        pass
+        except Exception:
+            num_files = max(1, int(file_size_mb * 5))
+            num_text = num_files
+
+        # Extraction
+        extraction_time = 0.3 + num_files * 0.05  # base + per file
+        extraction_time += num_pdf * 0.5  # PDF slower
+        extraction_time += num_docx * 0.3
+        estimates["extraction"] = round(extraction_time, 2)
+        estimates["details"].append(f"Extraction ZIP ({num_files} fichiers, {num_pdf} PDF, {num_docx} DOCX): ~{extraction_time:.1f}s")
+
+        # Preprocessing
+        preprocessing_time = num_text * 0.05 + num_code * 0.08
+        estimates["preprocessing"] = round(preprocessing_time, 2)
+
+        # Database comparison (per text/code file × corpus)
+        text_code_count = num_text + num_code
+        if corpus_size > 0 and text_code_count > 0:
+            per_comp = 0.08
+            if use_semantic:
+                per_comp += 0.12
+            if use_paraphrase:
+                per_comp += 0.10
+            db_time = text_code_count * corpus_size * per_comp
+            estimates["database_comparison"] = round(db_time, 2)
+            estimates["details"].append(f"Comparaison base ({text_code_count} fichiers × {corpus_size} corpus): ~{db_time:.1f}s")
+
+        # Cross comparison
+        if cross_compare and text_code_count > 1:
+            n_pairs = text_code_count * (text_code_count - 1) // 2
+            cross_per_pair = 0.15
+            if use_semantic:
+                cross_per_pair += 0.10
+            if use_paraphrase:
+                cross_per_pair += 0.08
+            cross_time = n_pairs * cross_per_pair
+            estimates["cross_comparison"] = round(cross_time, 2)
+            estimates["details"].append(f"Comparaison croisee ({n_pairs} paires): ~{cross_time:.1f}s")
+
+        # Image comparison
+        if num_images > 0 and corpus_size > 0:
+            # Count existing images
+            ex_imgs = sum(len(s.get("images", [])) for s in existing)
+            if ex_imgs > 0:
+                img_time = num_images * ex_imgs * 0.02  # pHash + features
+                estimates["image_comparison"] = round(img_time, 2)
+                estimates["details"].append(f"Comparaison images ({num_images} nouvelles × {ex_imgs} existantes): ~{img_time:.1f}s")
+
+    estimates["total"] = round(
+        estimates["extraction"] + estimates["preprocessing"] +
+        estimates["database_comparison"] + estimates["cross_comparison"] +
+        estimates["image_comparison"] + estimates["ml_models"], 1
+    )
+
+    # Level
+    total = estimates["total"]
+    if total <= 5:
+        estimates["level"] = "fast"
+        estimates["level_label"] = "Rapide"
+    elif total <= 15:
+        estimates["level"] = "medium"
+        estimates["level_label"] = "Moyen"
+    elif total <= 60:
+        estimates["level"] = "slow"
+        estimates["level_label"] = "Lent"
+    else:
+        estimates["level"] = "very_slow"
+        estimates["level_label"] = "Tres lent"
+
+    estimates["computation_time"] = round(time.time() - t, 4)
+    return estimates
+
+
+@app.post("/api/estimate")
+async def api_estimate_time(
+    file: UploadFile = File(...),
+    is_zip: bool = Form(False),
+    use_semantic: bool = Form(True),
+    use_paraphrase: bool = Form(True),
+    cross_compare: bool = Form(True),
+):
+    """
+    Endpoint d'estimation du temps de traitement.
+    Scan le fichier/ZIP sans faire l'analyse complete.
+    """
+    file_bytes = await file.read()
+    filename = file.filename or "unknown"
+
+    ext = os.path.splitext(filename)[1].lower()
+    actual_is_zip = ext == '.zip' or is_zip
+
+    estimate = estimate_processing_time(
+        file_bytes, filename,
+        is_zip=actual_is_zip,
+        use_semantic=use_semantic,
+        use_paraphrase=use_paraphrase,
+        cross_compare=cross_compare,
+    )
+
+    return JSONResponse(content={
+        "success": True,
+        "data": {
+            "filename": filename,
+            "file_size_mb": round(len(file_bytes) / (1024 * 1024), 2),
+            "is_zip": actual_is_zip,
+            "estimate": estimate,
+        }
+    })
 
 
 # ===========================================================================

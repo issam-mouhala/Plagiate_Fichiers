@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
-
+use App\Models\Submission;
+use App\Models\SubmissionZipFile;
+use App\Models\SubmissionAnalysis;
 class PlagiatController extends Controller
 {
     function index()
@@ -109,7 +111,55 @@ class PlagiatController extends Controller
                 'cours'  => 'Algorithmique'
             ])
              ]);
-    dd($response);
+             $data = $response->json();
+        $d    = $data['data'] ?? [];
+             $perFileResults = $d['per_file_database_analysis']['results'] ?? [];
+             $crossMatches   = $d['cross_file_analysis'] ?? [];
+             $imageMatches   = $d['image_analysis']['image_matches'] ?? [];
+             $submission = Submission::create([
+                'user_id'             => auth()->id(),
+                'filename'            => $r->file->getClientOriginalName(),
+                'original_extension'  => 'zip',
+                'detected_type'       => 'zip',
+                'file_size'           => $r->file->getSize(),
+                'is_zip'              => true,
+                'content_length'      => 0,
+                'images_extracted'    => $d['image_analysis']['images_checked'] ?? 0,
+                'overall_score'       => $d['overall_score'] ?? 0,
+                'overall_level'       => $d['overall_level'] ?? 'none',
+                'plagiarism_detected' => $d['plagiarism_detected'] ?? false,
+                'num_comparisons'     => 0,
+                'matches_count'       => count($crossMatches),
+                'text_matches_count'  => count($crossMatches),
+                'image_matches_count' => count($imageMatches),
+                'cross_matches_count' => count($crossMatches),
+                'engines_used'        => $d['engines_used'] ?? [],
+                'cross_matches'       => $crossMatches,
+                'image_matches'       => $imageMatches,
+                'per_file_results'    => $perFileResults,
+                'zip_info'            => $d['files_extracted'] ?? null,
+                'timing'              => $d['timing'] ?? null,
+                'raw_response'        => $data,
+                'source'              => 'upload',
+                'ip_address'          => $r->ip(),
+                'session_id'          => $r->session()->getId(),
+            ]);
+
+            // Sauvegarder les fichiers internes du ZIP
+            foreach ($perFileResults as $fileResult) {
+                SubmissionZipFile::create([
+                    'submission_id'   => $submission->id,
+                    'filename'         => $fileResult['filename'] ?? '',
+                    'extension'        => pathinfo($fileResult['filename'] ?? '', PATHINFO_EXTENSION),
+                    'file_type'        => $fileResult['file_type'] ?? 'text',
+                    'content_length'   => $fileResult['content_length'] ?? 0,
+                    'max_score'        => $fileResult['max_score'] ?? 0,
+                    'max_level'        => $fileResult['max_level'] ?? 'none',
+                    'best_match'       => $fileResult['best_match'] ?? null,
+                    'matches'          => $fileResult['matches'] ?? [],
+                ]);
+            }
+    dd($submission);
         if ($response->successful()) {
             $id = $response->json()['id'];
             echo "Fichier ajouté avec l'ID : $id";
@@ -122,4 +172,5 @@ class PlagiatController extends Controller
     function register(){
         return view("accueil.register");
     }
+
 }
