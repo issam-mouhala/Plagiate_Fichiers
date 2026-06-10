@@ -31,7 +31,7 @@ Route::post('/zip', function (Request $request) {
        'file',
        fopen("C:\Users\Any\OneDrive\Desktop\laravel\learn\public\\fils\\". $request->file('submission')->getClientOriginalName(), 'r'),
        $request->file('submission')->getClientOriginalName()
-   )->post('http://localhost:5000/api/check-zip', [
+   )->post(env('API_KEY_PY').'/api/check-zip', [
        'cross_compare'     => true,
        'add_to_database'  => false,
    ]);
@@ -40,7 +40,7 @@ Route::post('/zip', function (Request $request) {
 //dd($d);
    return view("analyse.analyse_zip", [
     // Archive
-    'zip_filename'     => $d['filename'] ?? $file->getClientOriginalName(),
+    'zip_filename'     => $d['filename'] ?? $request->file('submission')->getClientOriginalName(),
     'zip_info'         => $d['zip_info'] ?? [],
     'files_extracted'  => $d['files_extracted'] ?? [],
 

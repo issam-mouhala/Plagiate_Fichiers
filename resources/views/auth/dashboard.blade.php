@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" data-bs-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,8 @@
     <!-- Font Awesome 6 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #6366f1;
@@ -25,899 +27,1381 @@
             --topbar-height: 60px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        * { font-family: 'Inter', sans-serif; }
-        body { background: #f1f5f9; min-height: 100vh; overflow-x: hidden; }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
         /* ===== SIDEBAR ===== */
         .sidebar {
-            position: fixed; top: 0; left: 0; bottom: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
             width: var(--sidebar-width);
             background: linear-gradient(180deg, #1e1b4b 0%, #312e81 50%, #3730a3 100%);
             z-index: 1040;
             transition: var(--transition);
             overflow-y: auto;
-            box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
         }
-        .sidebar-brand {
-            padding: 20px; display: flex; align-items: center; gap: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .sidebar-brand .brand-icon {
-            width: 40px; height: 40px; border-radius: 12px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px; color: white; flex-shrink: 0;
-        }
-        .sidebar-brand h5 { color: white; margin: 0; font-size: 16px; font-weight: 700; }
-        .sidebar-brand small { color: rgba(255,255,255,0.6); font-size: 11px; }
 
-        .sidebar-nav { padding: 16px 12px; }
+        .sidebar-brand {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-brand .brand-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand h5 {
+            color: white;
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .sidebar-brand small {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 11px;
+        }
+
+        .sidebar-nav {
+            padding: 16px 12px;
+        }
+
         .nav-section-title {
-            color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 12px 8px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 12px 12px 8px;
         }
+
         .sidebar-nav .nav-link {
-            color: rgba(255,255,255,0.7); padding: 10px 14px; border-radius: 10px;
-            margin-bottom: 2px; transition: var(--transition); font-size: 14px; font-weight: 500;
-            display: flex; align-items: center; gap: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 2px;
+            transition: var(--transition);
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        .sidebar-nav .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
+
+        .sidebar-nav .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .sidebar-nav .nav-link.active {
-            color: white; background: rgba(255,255,255,0.15);
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
             box-shadow: inset 3px 0 0 var(--primary-light);
         }
-        .sidebar-nav .nav-link i { width: 20px; text-align: center; font-size: 15px; }
+
+        .sidebar-nav .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+        }
 
         /* ===== MAIN CONTENT ===== */
         .main-content {
             margin-left: var(--sidebar-width);
             transition: var(--transition);
         }
+
         .topbar {
             height: var(--topbar-height);
-            background: white; border-bottom: 1px solid #e2e8f0;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 24px; position: sticky; top: 0; z-index: 1030;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
         }
-        .topbar .page-title { font-weight: 700; font-size: 20px; /*color: var(--dark); */}
-        .topbar .api-status { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-        .status-dot.online { background: var(--success); box-shadow: 0 0 6px var(--success); }
-        .status-dot.offline { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
 
-        .content-area { padding: 24px; }
+        .topbar .page-title {
+            font-weight: 700;
+            font-size: 20px;
+            /*color: var(--dark); */
+        }
+
+        .topbar .api-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-dot.online {
+            background: var(--success);
+            box-shadow: 0 0 6px var(--success);
+        }
+
+        .status-dot.offline {
+            background: var(--danger);
+            box-shadow: 0 0 6px var(--danger);
+        }
+
+        .content-area {
+            padding: 24px;
+        }
 
         /* ===== CARDS ===== */
         .stat-card {
-            background: white; border-radius: 16px; padding: 24px;
-            border: 1px solid #e2e8f0; transition: var(--transition);
-            position: relative; overflow: hidden;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
-        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-        .stat-card .stat-icon {
-            width: 48px; height: 48px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; font-size: 20px;
-        }
-        .stat-card .stat-value { font-size: 28px; font-weight: 800;}
-        .stat-card .stat-label { color: #64748b; font-size: 13px; font-weight: 500; }
-        .stat-card::after {
-            content: ''; position: absolute; top: -30px; right: -30px;
-            width: 100px; height: 100px; border-radius: 50%; opacity: 0.06;
-        }
-        .card-stat-purple .stat-icon { background: #ede9fe; color: var(--primary); }
-        .card-stat-blue .stat-icon { background: #e0f2fe; color: var(--secondary); }
-        .card-stat-green .stat-icon { background: #d1fae5; color: var(--success); }
-        .card-stat-orange .stat-icon { background: #fef3c7; color: var(--warning); }
 
-        .card { border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; }
-        .card-header {
-            background: white; border-bottom: 1px solid #e2e8f0;
-            padding: 18px 24px; font-weight: 600; font-size: 16px;
-            display: flex; align-items: center; justify-content: space-between;
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
-        .card-body { padding: 24px; }
+
+        .stat-card .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .stat-card .stat-label {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            opacity: 0.06;
+        }
+
+        .card-stat-purple .stat-icon {
+            background: #ede9fe;
+            color: var(--primary);
+        }
+
+        .card-stat-blue .stat-icon {
+            background: #e0f2fe;
+            color: var(--secondary);
+        }
+
+        .card-stat-green .stat-icon {
+            background: #d1fae5;
+            color: var(--success);
+        }
+
+        .card-stat-orange .stat-icon {
+            background: #fef3c7;
+            color: var(--warning);
+        }
+
+        .card {
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 18px 24px;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
 
         /* ===== UPLOAD ZONES ===== */
         .upload-zone {
-            border: 2px dashed #cbd5e1; border-radius: 16px;
-            padding: 48px 24px; text-align: center;
-            transition: var(--transition); cursor: pointer;
-            background: #f8fafc; position: relative;
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 48px 24px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            background: #f8fafc;
+            position: relative;
         }
-        .upload-zone:hover, .upload-zone.drag-over {
-            border-color: var(--primary); background: #eef2ff;
+
+        .upload-zone:hover,
+        .upload-zone.drag-over {
+            border-color: var(--primary);
+            background: #eef2ff;
         }
-        .upload-zone.drag-over { box-shadow: 0 0 0 4px rgba(99,102,241,0.15); }
+
+        .upload-zone.drag-over {
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
         .upload-zone .upload-icon {
-            width: 72px; height: 72px; border-radius: 50%;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
             background: linear-gradient(135deg, #ede9fe, #e0f2fe);
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 16px; font-size: 28px; color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+            color: var(--primary);
         }
-        .upload-zone h5 { font-weight: 600; color: var(--dark); margin-bottom: 8px; }
-        .upload-zone p { color: #64748b; font-size: 14px; margin: 0; }
+
+        .upload-zone h5 {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .upload-zone p {
+            color: #64748b;
+            font-size: 14px;
+            margin: 0;
+        }
+
         .upload-zone input[type="file"] {
-            position: absolute; inset: 0; opacity: 0; cursor: pointer;
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
         }
 
         /* ===== TABS ===== */
         .nav-tabs-custom .nav-link {
-            color: #64748b; font-weight: 500; border: none;
-            padding: 12px 20px; border-radius: 10px 10px 0 0;
+            color: #64748b;
+            font-weight: 500;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px 10px 0 0;
             transition: var(--transition);
         }
+
         .nav-tabs-custom .nav-link.active {
-            color: var(--primary); font-weight: 600;
-            background: white; border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+            background: white;
+            border-bottom: 2px solid var(--primary);
         }
-        .nav-tabs-custom .nav-link:hover:not(.active) { color: var(--dark); background: #f1f5f9; }
+
+        .nav-tabs-custom .nav-link:hover:not(.active) {
+            color: var(--dark);
+            background: #f1f5f9;
+        }
 
         /* ===== RESULTS ===== */
         .result-card {
-            border-radius: 12px; border: 1px solid #e2e8f0;
-            padding: 16px 20px; margin-bottom: 12px;
-            transition: var(--transition); background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            transition: var(--transition);
+            background: white;
         }
-        .result-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+
+        .result-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
 
         .score-badge {
-            display: inline-flex; align-items: center; padding: 4px 12px;
-            border-radius: 20px; font-size: 13px; font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
         }
-        .score-badge.critical { background: #fee2e2; color: #dc2626; }
-        .score-badge.high { background: #ffedd5; color: #ea580c; }
-        .score-badge.medium { background: #fef3c7; color: #d97706; }
-        .score-badge.low { background: #e0f2fe; color: #0284c7; }
-        .score-badge.none { background: #f1f5f9; color: #64748b; }
+
+        .score-badge.critical {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .score-badge.high {
+            background: #ffedd5;
+            color: #ea580c;
+        }
+
+        .score-badge.medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .score-badge.low {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .score-badge.none {
+            background: #f1f5f9;
+            color: #64748b;
+        }
 
         .engine-bar {
-            height: 6px; border-radius: 3px; background: #e2e8f0; overflow: hidden;
+            height: 6px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            overflow: hidden;
         }
+
         .engine-bar-fill {
-            height: 100%; border-radius: 3px;
+            height: 100%;
+            border-radius: 3px;
             transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .file-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 16px; border-radius: 10px; border: 1px solid #e2e8f0;
-            margin-bottom: 8px; background: white; transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 8px;
+            background: white;
+            transition: var(--transition);
         }
-        .file-item:hover { background: #f8fafc; }
+
+        .file-item:hover {
+            background: #f8fafc;
+        }
 
         /* ===== LOADING ===== */
         .loader-overlay {
-            position: fixed; inset: 0; background: rgba(15,23,42,0.6);
-            backdrop-filter: blur(4px); z-index: 9999;
-            display: flex; align-items: center; justify-content: center;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
         .loader-box {
-            background: white; border-radius: 20px; padding: 40px;
-            text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
             min-width: 320px;
         }
+
         .spinner-ring {
-            width: 56px; height: 56px; border: 4px solid #e2e8f0;
-            border-top-color: var(--primary); border-radius: 50%;
-            animation: spin 0.8s linear infinite; margin: 0 auto 20px;
+            width: 56px;
+            height: 56px;
+            border: 4px solid #e2e8f0;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loader-box p { color: #64748b; font-size: 14px; }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-box p {
+            color: #64748b;
+            font-size: 14px;
+        }
 
         /* ===== TOAST ===== */
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
         .custom-toast {
-            background: white; border-radius: 12px; padding: 16px 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12); margin-bottom: 8px;
-            display: flex; align-items: center; gap: 12px;
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             border-left: 4px solid var(--primary);
             animation: slideIn 0.3s ease-out;
             max-width: 400px;
         }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
 
         /* ===== TABLE ===== */
-        .table-modern { border-collapse: separate; border-spacing: 0; }
-        .table-modern thead th {
-            background: #f8fafc; color: #64748b; font-size: 12px;
-            font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
-            border-bottom: 1px solid #e2e8f0; padding: 12px 16px;
+        .table-modern {
+            border-collapse: separate;
+            border-spacing: 0;
         }
-        .table-modern tbody td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+
+        .table-modern thead th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 16px;
+        }
+
+        .table-modern tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
 
         /* ===== SECTION PAGES ===== */
-        .page-section { display: none; }
-        .page-section.active { display: block; }
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
 
         /* ===== MISC ===== */
         .api-url-input {
-            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
-            padding: 8px 14px; font-size: 13px; color: #64748b; width: 280px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 13px;
+            color: #64748b;
+            width: 280px;
         }
+
         .btn-primary-custom {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none; color: white; font-weight: 600; border-radius: 10px;
-            padding: 10px 24px; transition: var(--transition);
+            border: none;
+            color: white;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 10px 24px;
+            transition: var(--transition);
         }
+
         .btn-primary-custom:hover {
             background: linear-gradient(135deg, var(--primary-dark), #0284c7);
-            color: white; transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
+
         .btn-outline-custom {
-            border: 2px solid var(--primary); color: var(--primary);
-            font-weight: 600; border-radius: 10px; padding: 8px 20px;
-            transition: var(--transition); background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 8px 20px;
+            transition: var(--transition);
+            background: transparent;
         }
-        .btn-outline-custom:hover { background: var(--primary); color: white; }
-        .empty-state { text-align: center; padding: 48px 24px; color: #94a3b8; }
-        .empty-state i { font-size: 48px; margin-bottom: 16px; }
+
+        .btn-outline-custom:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
         .progress-custom {
-            height: 8px; border-radius: 4px; background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            background: #e2e8f0;
         }
+
         .progress-custom .progress-bar {
-            border-radius: 4px; transition: width 1s ease;
+            border-radius: 4px;
+            transition: width 1s ease;
         }
 
         /* Dark Mode */
-        [data-bs-theme="dark"] body { background: #0f172a; }
-        [data-bs-theme="dark"] .sidebar { background: linear-gradient(180deg, #0c0a1f, #1a1640, #1e1b4b); }
-        [data-bs-theme="dark"] .topbar { background: #1e293b; border-color: #334155; }
-        [data-bs-theme="dark"] .card, [data-bs-theme="dark"] .stat-card,
-        [data-bs-theme="dark"] .result-card, [data-bs-theme="dark"] .file-item {
-            background: #1e293b; border-color: #334155;
+        [data-bs-theme="dark"] body {
+            background: #0f172a;
         }
-        [data-bs-theme="dark"] .card-header { background: #1e293b; border-color: #334155; }
-        [data-bs-theme="dark"] .upload-zone { background: #1e293b; border-color: #334155; }
-        [data-bs-theme="dark"] .table-modern thead th { background: #1e293b; }
-        [data-bs-theme="dark"] .table-modern tbody td { border-color: #334155; }
-        [data-bs-theme="dark"] h1,h2,h3,h4,h5,h6,.topbar .page-title { /*color: #e2e8f0;**/ }
-        [data-bs-theme="dark"] p,.text-muted { color: #94a3b8; }
-        [data-bs-theme="dark"] .loader-box { background: #1e293b; }
+
+        [data-bs-theme="dark"] .sidebar {
+            background: linear-gradient(180deg, #0c0a1f, #1a1640, #1e1b4b);
+        }
+
+        [data-bs-theme="dark"] .topbar {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        [data-bs-theme="dark"] .card,
+        [data-bs-theme="dark"] .stat-card,
+        [data-bs-theme="dark"] .result-card,
+        [data-bs-theme="dark"] .file-item {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        [data-bs-theme="dark"] .card-header {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        [data-bs-theme="dark"] .upload-zone {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        [data-bs-theme="dark"] .table-modern thead th {
+            background: #1e293b;
+        }
+
+        [data-bs-theme="dark"] .table-modern tbody td {
+            border-color: #334155;
+        }
+
+        [data-bs-theme="dark"] h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .topbar .page-title {
+            /*color: #e2e8f0;**/
+        }
+
+        [data-bs-theme="dark"] p,
+        .text-muted {
+            color: #94a3b8;
+        }
+
+        [data-bs-theme="dark"] .loader-box {
+            background: #1e293b;
+        }
 
         /* Responsive */
         @media (max-width: 992px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.show { transform: translateX(0); }
-            .main-content { margin-left: 0; }
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<!-- ===== LOADER OVERLAY ===== -->
-<div id="loaderOverlay" class="loader-overlay" style="display:none;">
-    <div class="loader-box">
-        <div class="spinner-ring"></div>
-        <h6 id="loaderTitle" class="fw-bold mb-1">Analyse en cours...</h6>
-        <p id="loaderText">Veuillez patienter, l'analyse peut prendre quelques instants.</p>
-    </div>
-</div>
-
-<!-- ===== TOAST CONTAINER ===== -->
-<div class="toast-container" id="toastContainer"></div>
-
-<!-- ===== SIDEBAR ===== -->
-<nav class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-        <div class="brand-icon"><i class="fas fa-shield-halved"></i></div>
-        <div>
-            <h5>PlagiatScan</h5>
-            <small>Detection Intelligente</small>
+    <!-- ===== LOADER OVERLAY ===== -->
+    <div id="loaderOverlay" class="loader-overlay" style="display:none;">
+        <div class="loader-box">
+            <div class="spinner-ring"></div>
+            <h6 id="loaderTitle" class="fw-bold mb-1">Analyse en cours...</h6>
+            <p id="loaderText">Veuillez patienter, l'analyse peut prendre quelques instants.</p>
         </div>
     </div>
-    <div class="sidebar-nav">
-        <div class="nav-section-title">Principal</div>
-        <a href="#" class="nav-link active" data-page="dashboard" onclick="showPage('dashboard')">
-            <i class="fas fa-chart-pie"></i> Dashboard
-        </a>
-        <a href="#" class="nav-link" data-page="upload" onclick="showPage('upload')">
-            <i class="fas fa-cloud-arrow-up"></i> Analyser un fichier
-        </a>
-        <a href="#" class="nav-link" data-page="upload-zip" onclick="showPage('upload-zip')">
-            <i class="fas fa-file-zipper"></i> Analyser un ZIP
-        </a>
-        <div class="nav-section-title">Base de donnees</div>
-        <a href="#" class="nav-link" data-page="database" onclick="showPage('database')">
-            <i class="fas fa-database"></i> Corpus
-        </a>
-        <div class="nav-section-title">Systeme</div>
-        <a href="#" class="nav-link" data-page="settings" onclick="showPage('settings')">
-            <i class="fas fa-gear"></i> Configuration
-        </a>
-    </div>
-</nav>
 
-<!-- ===== MAIN ===== -->
-<div class="main-content" id="mainContent">
-    <!-- Topbar -->
-    <div class="topbar">
-        <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-sm btn-outline-secondary d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('show')">
-                <i class="fas fa-bars"></i>
-            </button>
-            <span class="page-title" id="pageTitle">Dashboard</span>
-        </div>
-        <div class="d-flex align-items-center gap-3">
-            <div class="api-status" id="apiStatusBar">
-                <span class="status-dot offline" id="statusDot"></span>
-                <span id="statusText">Deconnecte</span>
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon"><i class="fas fa-shield-halved"></i></div>
+            <div>
+                <h5>PlagiatScan</h5>
+                <small>Detection Intelligente</small>
             </div>
-            <input type="text" class="api-url-input" id="apiUrlInput" value="http://localhost:5000" placeholder="API URL">
-            <button class="btn btn-sm btn-outline-custom" onclick="checkHealth()"><i class="fas fa-plug"></i></button>
-            <button class="btn btn-sm btn-outline-secondary" onclick="toggleDarkMode()" title="Mode sombre">
-                <i class="fas fa-moon" id="darkModeIcon"></i>
-            </button>
         </div>
-    </div>
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Principal</div>
+            <a href="#" class="nav-link active" data-page="dashboard" onclick="showPage('dashboard')">
+                <i class="fas fa-chart-pie"></i> Dashboard
+            </a>
+            <a href="#" class="nav-link" data-page="upload" onclick="showPage('upload')">
+                <i class="fas fa-cloud-arrow-up"></i> Analyser un fichier
+            </a>
+            <a href="#" class="nav-link" data-page="upload-zip" onclick="showPage('upload-zip')">
+                <i class="fas fa-file-zipper"></i> Analyser un ZIP
+            </a>
+            <div class="nav-section-title">Base de donnees</div>
+            <a href="#" class="nav-link" data-page="database" onclick="showPage('database')">
+                <i class="fas fa-database"></i> Corpus
+            </a>
+            <div class="nav-section-title">Systeme</div>
+            <a href="#" class="nav-link" data-page="settings" onclick="showPage('settings')">
+                <i class="fas fa-gear"></i> Configuration
+            </a>
+        </div>
+    </nav>
 
-    <!-- Content -->
-    <div class="content-area">
-
-        <!-- ==================== DASHBOARD PAGE ==================== -->
-        <div class="page-section active" id="page-dashboard">
-            <div class="row g-3 mb-4" id="statsCards">
-                <div class="col-md-3">
-                    <div class="stat-card card-stat-purple">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <p class="stat-label">Total Soumissions</p>
-                                <h2 class="stat-value" id="statTotal">-</h2>
-                            </div>
-                            <div class="stat-icon"><i class="fas fa-file-lines"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-card card-stat-blue">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <p class="stat-label">Fichiers Texte</p>
-                                <h2 class="stat-value" id="statText">-</h2>
-                            </div>
-                            <div class="stat-icon"><i class="fas fa-file-word"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-card card-stat-green">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <p class="stat-label">Fichiers Code</p>
-                                <h2 class="stat-value" id="statCode">-</h2>
-                            </div>
-                            <div class="stat-icon"><i class="fas fa-file-code"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-card card-stat-orange">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <p class="stat-label">Images</p>
-                                <h2 class="stat-value" id="statImages">-</h2>
-                            </div>
-                            <div class="stat-icon"><i class="fas fa-image"></i></div>
-                        </div>
-                    </div>
-                </div>
+    <!-- ===== MAIN ===== -->
+    <div class="main-content" id="mainContent">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-sm btn-outline-secondary d-lg-none"
+                    onclick="document.getElementById('sidebar').classList.toggle('show')">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <span class="page-title" id="pageTitle">Dashboard</span>
             </div>
-
-            <div class="row g-3">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <span><i class="fas fa-chart-bar me-2"></i>Distribution du Corpus</span>
-                            <button class="btn btn-sm btn-outline-custom" onclick="loadStats()">
-                                <i class="fas fa-refresh"></i> Rafraichir
-                            </button>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="corpusChart" height="260"></canvas>
-                        </div>
-                    </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="api-status" id="apiStatusBar">
+                    <span class="status-dot offline" id="statusDot"></span>
+                    <span id="statusText">Deconnecte</span>
                 </div>
-                <div class="col-md-4">
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            <span><i class="fas fa-heart-pulse me-2"></i>Etat du Systeme</span>
-                        </div>
-                        <div class="card-body" id="healthPanel">
-                            <div class="empty-state py-3">
-                                <i class="fas fa-plug"></i>
-                                <p class="mt-2">Cliquez sur <b>Connecter</b> pour verifier l'API</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <span><i class="fas fa-bolt me-2"></i>Actions rapides</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-primary-custom" onclick="showPage('upload')">
-                                    <i class="fas fa-upload me-2"></i>Analyser un fichier
-                                </button>
-                                <button class="btn btn-primary-custom" onclick="showPage('upload-zip')">
-                                    <i class="fas fa-file-zipper me-2"></i>Analyser un ZIP
-                                </button>
-                                <button class="btn btn-outline-custom" onclick="showPage('database')">
-                                    <i class="fas fa-database me-2"></i>Voir le corpus
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <input type="text" class="api-url-input" id="apiUrlInput"
+                    value="https://issahn-plagiarism-api.hf.space/api/health" placeholder="API URL">
+                <button class="btn btn-sm btn-outline-custom" onclick="checkHealth()"><i
+                        class="fas fa-plug"></i></button>
+                <button class="btn btn-sm btn-outline-secondary" onclick="toggleDarkMode()" title="Mode sombre">
+                    <i class="fas fa-moon" id="darkModeIcon"></i>
+                </button>
             </div>
         </div>
 
-        <!-- ==================== UPLOAD FILE PAGE ==================== -->
-        <form  enctype="multipart/form-data"
-        action="{{ route('analyse.index') }}"
-        method="post"
-        target="_blank"
+        <!-- Content -->
+        <div class="content-area">
 
-        >          @csrf
-        <div class="page-section" id="page-upload">
-            <div class="row g-3">
-                <div class="col-md-5">
-                    <div class="card">
-                        <div class="card-header">
-                            <span><i class="fas fa-cloud-arrow-up me-2"></i>Depot de fichier</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="upload-zone" id="fileDropZone">
-                                <input type="file" id="fileInput" onchange="handleFileSelect(event)" name="submission">
-                                <div class="upload-icon"><i class="fas fa-cloud-arrow-up"></i></div>
-                                <h5>Glissez-deposez votre fichier ici</h5>
-                                <p class="mb-2">ou cliquez pour selectionner</p>
-                                <p class="text-muted" style="font-size:12px;">
-                                    .txt .md .py .js .java .c .cpp .pdf .docx .png .jpg .gif .bmp
-                                </p>
+            <!-- ==================== DASHBOARD PAGE ==================== -->
+            <div class="page-section active" id="page-dashboard">
+                <div class="row g-3 mb-4" id="statsCards">
+                    <div class="col-md-3">
+                        <div class="stat-card card-stat-purple">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="stat-label">Total Soumissions</p>
+                                    <h2 class="stat-value" id="statTotal">-</h2>
+                                </div>
+                                <div class="stat-icon"><i class="fas fa-file-lines"></i></div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card card-stat-blue">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="stat-label">Fichiers Texte</p>
+                                    <h2 class="stat-value" id="statText">-</h2>
+                                </div>
+                                <div class="stat-icon"><i class="fas fa-file-word"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card card-stat-green">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="stat-label">Fichiers Code</p>
+                                    <h2 class="stat-value" id="statCode">-</h2>
+                                </div>
+                                <div class="stat-icon"><i class="fas fa-file-code"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card card-stat-orange">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="stat-label">Images</p>
+                                    <h2 class="stat-value" id="statImages">-</h2>
+                                </div>
+                                <div class="stat-icon"><i class="fas fa-image"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                            <div id="filePreview" class="mt-3" style="display:none;">
-                                <div class="file-item">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="stat-icon card-stat-purple" style="width:40px;height:40px;font-size:16px;" id="filePreviewIcon">
-                                            <i class="fas fa-file"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fw-semibold" id="filePreviewName">fichier.txt</div>
-                                            <small class="text-muted" id="filePreviewSize">0 KB</small>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-sm btn-outline-danger sub" onclick="clearFileSelection()">
-                                        <i class="fas fa-times"></i>
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <span><i class="fas fa-chart-bar me-2"></i>Distribution du Corpus</span>
+                                <button class="btn btn-sm btn-outline-custom" onclick="loadStats()">
+                                    <i class="fas fa-refresh"></i> Rafraichir
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="corpusChart" height="260"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <span><i class="fas fa-heart-pulse me-2"></i>Etat du Systeme</span>
+                            </div>
+                            <div class="card-body" id="healthPanel">
+                                <div class="empty-state py-3">
+                                    <i class="fas fa-plug"></i>
+                                    <p class="mt-2">Cliquez sur <b>Connecter</b> pour verifier l'API</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <span><i class="fas fa-bolt me-2"></i>Actions rapides</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-primary-custom" onclick="showPage('upload')">
+                                        <i class="fas fa-upload me-2"></i>Analyser un fichier
+                                    </button>
+                                    <button class="btn btn-primary-custom" onclick="showPage('upload-zip')">
+                                        <i class="fas fa-file-zipper me-2"></i>Analyser un ZIP
+                                    </button>
+                                    <button class="btn btn-outline-custom" onclick="showPage('database')">
+                                        <i class="fas fa-database me-2"></i>Voir le corpus
                                     </button>
                                 </div>
                             </div>
-
-                            <!-- Options -->
-                            <div class="mt-3">
-                                <h6 class="fw-semibold mb-2"><i class="fas fa-sliders me-1"></i> Options d'analyse</h6>
-                                <div class="row g-2">
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="optSemantic" checked>
-                                            <label class="form-check-label" for="optSemantic">Semantique BERT</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="optWinnowing" checked>
-                                            <label class="form-check-label" for="optWinnowing">Winnowing</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="optAst" checked>
-                                            <label class="form-check-label" for="optAst">AST</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="optLcs" checked>
-                                            <label class="form-check-label" for="optLcs">LCS</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="d-grid mt-3">
-                                <button class="btn btn-primary-custom btn-lg" id="btnAnalyzeFile" onclick="analyzeFile()" disabled>
-                                    <i class="fas fa-magnifying-glass-chart me-2 sub"></i>Lancer l'analyse
-                                </button>
-                                <button type="submit" class="btn btn-primary-custom btn-lg  mt-2 " >
-                                    <i class="fas fa-magnifying-glass-chart me-2"></i>Lancer l'analyse détaillée
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-7">
-                    <div class="card" id="resultsCard" style="display:none;">
-                        <div class="card-header">
-                            <span><i class="fas fa-chart-line me-2"></i>Resultats de l'analyse</span>
-                            <span class="score-badge" id="resultOverallBadge">-</span>
-                        </div>
-                        <div class="card-body" id="resultsBody">
-                            <!-- Filled dynamically -->
-                        </div>
-                    </div>
-                    <div id="resultsPlaceholder">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="empty-state">
-                                    <i class="fas fa-microscope"></i>
-                                    <h5 class="text-muted mt-2">En attente d'analyse</h5>
-                                    <p class="text-muted">Deposez un fichier et lancez l'analyse pour voir les resultats ici.</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        </form>
-        <!-- ==================== UPLOAD ZIP PAGE ==================== -->
-        <form  enctype="multipart/form-data"
-        action="{{ route('analyse_zip') }}"
-        method="POST"
-        target="_blank"
-        >          @csrf
 
-        <div class="page-section" id="page-upload-zip">
-            <div class="row g-3">
-                <div class="col-md-5">
-                    <div class="card">
-                        <div class="card-header">
-                            <span><i class="fas fa-file-zipper me-2"></i>Depot ZIP</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="upload-zone" id="zipDropZone">
-                                <input type="file" name="submission" id="zipInput" accept=".zip" onchange="handleZipSelect(event)">
-                                <div class="upload-icon"><i class="fas fa-file-zipper"></i></div>
-                                <h5>Glissez-deposez votre ZIP</h5>
-                                <p class="mb-2">Archive contenant fichiers texte, code, PDF, Word ou images</p>
-                                <p class="text-muted" style="font-size:12px;">Taille max recommandee : 100 MB</p>
+            <!-- ==================== UPLOAD FILE PAGE ==================== -->
+            <form enctype="multipart/form-data" action="{{ route('analyse.index') }}" method="post"
+                target="_blank"> @csrf
+                <div class="page-section" id="page-upload">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-header">
+                                    <span><i class="fas fa-cloud-arrow-up me-2"></i>Depot de fichier</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="upload-zone" id="fileDropZone">
+                                        <input type="file" id="fileInput" onchange="handleFileSelect(event)"
+                                            name="submission">
+                                        <div class="upload-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+                                        <h5>Glissez-deposez votre fichier ici</h5>
+                                        <p class="mb-2">ou cliquez pour selectionner</p>
+                                        <p class="text-muted" style="font-size:12px;">
+                                            .txt .md .py .js .java .c .cpp .pdf .docx .png .jpg .gif .bmp
+                                        </p>
+                                    </div>
+
+                                    <div id="filePreview" class="mt-3" style="display:none;">
+                                        <div class="file-item">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="stat-icon card-stat-purple"
+                                                    style="width:40px;height:40px;font-size:16px;"
+                                                    id="filePreviewIcon">
+                                                    <i class="fas fa-file"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-semibold" id="filePreviewName">fichier.txt</div>
+                                                    <small class="text-muted" id="filePreviewSize">0 KB</small>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-danger sub"
+                                                onclick="clearFileSelection()">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Options -->
+                                    <div class="mt-3">
+                                        <h6 class="fw-semibold mb-2"><i class="fas fa-sliders me-1"></i> Options
+                                            d'analyse</h6>
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="optSemantic"
+                                                        checked>
+                                                    <label class="form-check-label" for="optSemantic">Semantique
+                                                        BERT</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="optWinnowing"
+                                                        checked>
+                                                    <label class="form-check-label"
+                                                        for="optWinnowing">Winnowing</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="optAst"
+                                                        checked>
+                                                    <label class="form-check-label" for="optAst">AST</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="optLcs"
+                                                        checked>
+                                                    <label class="form-check-label" for="optLcs">LCS</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid mt-3">
+                                        <button class="btn btn-primary-custom btn-lg sub" id="btnAnalyzeFile"
+                                            onclick="analyzeFile()" disabled>
+                                            <i class="fas fa-magnifying-glass-chart me-2 "></i>Lancer l'analyse
+                                        </button>
+                                        <button type="submit" class="btn btn-primary-custom btn-lg  mt-2 ">
+                                            <i class="fas fa-magnifying-glass-chart me-2"></i>Lancer l'analyse
+                                            détaillée
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
 
-                            <div id="zipPreview" class="mt-3" style="display:none;">
-                                <div class="file-item">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="stat-icon card-stat-blue" style="width:40px;height:40px;font-size:16px;">
+                        <div class="col-md-7">
+                            <div class="card" id="resultsCard" style="display:none;">
+                                <div class="card-header">
+                                    <span><i class="fas fa-chart-line me-2"></i>Resultats de l'analyse</span>
+                                    <span class="score-badge" id="resultOverallBadge">-</span>
+                                </div>
+                                <div class="card-body" id="resultsBody">
+                                    <!-- Filled dynamically -->
+                                </div>
+                            </div>
+                            <div id="resultsPlaceholder">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="empty-state">
+                                            <i class="fas fa-microscope"></i>
+                                            <h5 class="text-muted mt-2">En attente d'analyse</h5>
+                                            <p class="text-muted">Deposez un fichier et lancez l'analyse pour voir les
+                                                resultats ici.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- ==================== UPLOAD ZIP PAGE ==================== -->
+            <form enctype="multipart/form-data" action="{{ route('analyse_zip') }}" method="POST" target="_blank">
+                @csrf
+
+                <div class="page-section" id="page-upload-zip">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-header">
+                                    <span><i class="fas fa-file-zipper me-2"></i>Depot ZIP</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="upload-zone" id="zipDropZone">
+                                        <input type="file" name="submission" id="zipInput" accept=".zip"
+                                            onchange="handleZipSelect(event)">
+                                        <div class="upload-icon"><i class="fas fa-file-zipper"></i></div>
+                                        <h5>Glissez-deposez votre ZIP</h5>
+                                        <p class="mb-2">Archive contenant fichiers texte, code, PDF, Word ou images
+                                        </p>
+                                        <p class="text-muted" style="font-size:12px;">Taille max recommandee : 100 MB
+                                        </p>
+                                    </div>
+
+                                    <div id="zipPreview" class="mt-3" style="display:none;">
+                                        <div class="file-item">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="stat-icon card-stat-blue"
+                                                    style="width:40px;height:40px;font-size:16px;">
+                                                    <i class="fas fa-file-zipper"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-semibold" id="zipPreviewName">archive.zip</div>
+                                                    <small class="text-muted" id="zipPreviewSize">0 KB</small>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-danger sub"
+                                                onclick="clearZipSelection()">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <h6 class="fw-semibold mb-2"><i class="fas fa-sliders me-1"></i> Options</h6>
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="optZipCross" checked>
+                                            <label class="form-check-label" for="optZipCross">Comparaison croisee
+                                                entre fichiers</label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="optZipAddDb" checked>
+                                            <label class="form-check-label" for="optZipAddDb">Ajouter au corpus apres
+                                                analyse</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid mt-3">
+                                        <button class="btn btn-primary-custom btn-lg sub" id="btnAnalyzeZip"
+                                            onclick="analyzeZip()" disabled>
+                                            <i class="fas fa-magnifying-glass-chart me-2 "></i>Analyser le ZIP
+                                        </button>
+                                        <button class="btn btn-primary-custom btn-lg mt-2" id="btnAnalyzeZip"
+                                            type="submit">
+                                            <i class="fas fa-magnifying-glass-chart me-2"></i>Analyser le ZIP détaillée
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card" id="zipResultsCard" style="display:none;">
+                                <div class="card-header">
+                                    <span><i class="fas fa-chart-line me-2"></i>Resultats ZIP</span>
+                                    <span class="score-badge" id="zipOverallBadge">-</span>
+                                </div>
+                                <div class="card-body" id="zipResultsBody">
+                                    <!-- Filled dynamically -->
+                                </div>
+                            </div>
+                            <div id="zipResultsPlaceholder">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="empty-state">
                                             <i class="fas fa-file-zipper"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fw-semibold" id="zipPreviewName">archive.zip</div>
-                                            <small class="text-muted" id="zipPreviewSize">0 KB</small>
+                                            <h5 class="text-muted mt-2">En attente d'analyse ZIP</h5>
+                                            <p class="text-muted">Deposez une archive ZIP et lancez l'analyse.</p>
                                         </div>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-danger sub" onclick="clearZipSelection()">
-                                        <i class="fas fa-times"></i>
-                                    </button>
                                 </div>
-                            </div>
-
-                            <div class="mt-3">
-                                <h6 class="fw-semibold mb-2"><i class="fas fa-sliders me-1"></i> Options</h6>
-                                <div class="form-check form-switch mb-2">
-                                    <input class="form-check-input" type="checkbox" id="optZipCross" checked>
-                                    <label class="form-check-label" for="optZipCross">Comparaison croisee entre fichiers</label>
-                                </div>
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="optZipAddDb" checked>
-                                    <label class="form-check-label" for="optZipAddDb">Ajouter au corpus apres analyse</label>
-                                </div>
-                            </div>
-
-                            <div class="d-grid mt-3">
-                                <button class="btn btn-primary-custom btn-lg sub" id="btnAnalyzeZip" onclick="analyzeZip()" disabled>
-                                    <i class="fas fa-magnifying-glass-chart me-2 "></i>Analyser le ZIP
-                                </button>
-                                <button class="btn btn-primary-custom btn-lg mt-2" id="btnAnalyzeZip" type="submit">
-                                    <i class="fas fa-magnifying-glass-chart me-2"></i>Analyser le ZIP détaillée
-                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-7">
-                    <div class="card" id="zipResultsCard" style="display:none;">
-                        <div class="card-header">
-                            <span><i class="fas fa-chart-line me-2"></i>Resultats ZIP</span>
-                            <span class="score-badge" id="zipOverallBadge">-</span>
-                        </div>
-                        <div class="card-body" id="zipResultsBody">
-                            <!-- Filled dynamically -->
+            </form>
+
+            <!-- ==================== DATABASE PAGE ==================== -->
+            <div class="page-section" id="page-database">
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-database me-2"></i>Corpus — Soumissions enregistrees</span>
+                        <button class="btn btn-sm btn-outline-custom" onclick="loadDatabase()">
+                            <i class="fas fa-refresh"></i> Rafraichir
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="databaseContent">
+                            <div class="empty-state">
+                                <i class="fas fa-database"></i>
+                                <p class="mt-2">Cliquez sur Rafraichir pour charger le corpus.</p>
+                            </div>
                         </div>
                     </div>
-                    <div id="zipResultsPlaceholder">
+                </div>
+            </div>
+
+            <!-- ==================== SETTINGS PAGE ==================== -->
+            <div class="page-section" id="page-settings">
+                <div class="row g-3">
+                    <div class="col-md-6">
                         <div class="card">
+                            <div class="card-header"><span><i class="fas fa-server me-2"></i>Connexion API</span>
+                            </div>
                             <div class="card-body">
-                                <div class="empty-state">
-                                    <i class="fas fa-file-zipper"></i>
-                                    <h5 class="text-muted mt-2">En attente d'analyse ZIP</h5>
-                                    <p class="text-muted">Deposez une archive ZIP et lancez l'analyse.</p>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">URL de l'API</label>
+                                    <input type="text" class="form-control" id="settingsApiUrl"
+                                        value="https://issahn-plagiarism-api.hf.space">
                                 </div>
+                                <button class="btn btn-primary-custom" onclick="applySettings()">
+                                    <i class="fas fa-check me-2"></i>Appliquer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header"><span><i class="fas fa-info-circle me-2"></i>Infos</span></div>
+                            <div class="card-body">
+                                <table class="table table-sm table-modern mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="fw-semibold">Version API</td>
+                                            <td>v4 / v5</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Dashboard</td>
+                                            <td>Bootstrap 5.3</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Moteurs</td>
+                                            <td>TF-IDF, BERT, Winnowing, AST, LCS</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Formats</td>
+                                            <td>Txt, Code, PDF, Word, Images, ZIP</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
 
-        <!-- ==================== DATABASE PAGE ==================== -->
-        <div class="page-section" id="page-database">
-            <div class="card">
-                <div class="card-header">
-                    <span><i class="fas fa-database me-2"></i>Corpus — Soumissions enregistrees</span>
-                    <button class="btn btn-sm btn-outline-custom" onclick="loadDatabase()">
-                        <i class="fas fa-refresh"></i> Rafraichir
-                    </button>
-                </div>
-                <div class="card-body">
-                    <div id="databaseContent">
-                        <div class="empty-state">
-                            <i class="fas fa-database"></i>
-                            <p class="mt-2">Cliquez sur Rafraichir pour charger le corpus.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-
-        <!-- ==================== SETTINGS PAGE ==================== -->
-        <div class="page-section" id="page-settings">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header"><span><i class="fas fa-server me-2"></i>Connexion API</span></div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">URL de l'API</label>
-                                <input type="text" class="form-control" id="settingsApiUrl" value="http://localhost:5000">
-                            </div>
-                            <button class="btn btn-primary-custom" onclick="applySettings()">
-                                <i class="fas fa-check me-2"></i>Appliquer
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header"><span><i class="fas fa-info-circle me-2"></i>Infos</span></div>
-                        <div class="card-body">
-                            <table class="table table-sm table-modern mb-0">
-                                <tbody>
-                                    <tr><td class="fw-semibold">Version API</td><td>v4 / v5</td></tr>
-                                    <tr><td class="fw-semibold">Dashboard</td><td>Bootstrap 5.3</td></tr>
-                                    <tr><td class="fw-semibold">Moteurs</td><td>TF-IDF, BERT, Winnowing, AST, LCS</td></tr>
-                                    <tr><td class="fw-semibold">Formats</td><td>Txt, Code, PDF, Word, Images, ZIP</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
-</div>
 
-<!-- ===== SCRIPTS ===== -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script>
-// ===========================================================================
-// CONFIG
-// ===========================================================================
-let API_URL = localStorage.getItem('plagiat_api_url') || 'http://localhost:5000';
-let selectedFile = null;
-let selectedZip = null;
-let corpusChart = null;
+    <!-- ===== SCRIPTS ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script>
+        // ===========================================================================
+        // CONFIG
+        // ===========================================================================
+        let API_URL = localStorage.getItem('plagiat_api_url') || 'https://issahn-plagiarism-api.hf.space';
+        let selectedFile = null;
+        let selectedZip = null;
+        let corpusChart = null;
 
-document.getElementById('apiUrlInput').value = API_URL;
-document.getElementById('settingsApiUrl').value = API_URL;
+        document.getElementById('apiUrlInput').value = API_URL;
+        document.getElementById('settingsApiUrl').value = API_URL;
 
-// ===========================================================================
-// UTILITY
-// ===========================================================================
-const monBouton = document.querySelectorAll('.sub');
+        // ===========================================================================
+        // UTILITY
+        // ===========================================================================
+        const monBouton = document.querySelectorAll('.sub');
 
 
-monBouton.forEach((e)=>{
-e.addEventListener('click', function(event) {
-    // Bloque la soumission du formulaire
-    event.preventDefault();
+        monBouton.forEach((e) => {
+            e.addEventListener('click', function(event) {
+                // Bloque la soumission du formulaire
+                event.preventDefault();
 
-    // Votre code personnalisé ici (validation, AJAX, etc.)
-    console.log("Le bouton a été cliqué sans soumettre le formulaire !");
-});
-})
+                // Votre code personnalisé ici (validation, AJAX, etc.)
+                console.log("Le bouton a été cliqué sans soumettre le formulaire !");
+            });
+        })
 
-function getApiUrl() {
-    return document.getElementById('apiUrlInput').value.replace(/\/$/, '');
-}
+        function getApiUrl() {
+            return document.getElementById('apiUrlInput').value.replace(/\/$/, '');
+        }
 
-function showLoader(title, text) {
-    document.getElementById('loaderTitle').textContent = title || 'Analyse en cours...';
-    document.getElementById('loaderText').textContent = text || 'Veuillez patienter.';
-    document.getElementById('loaderOverlay').style.display = 'flex';
-}
+        function showLoader(title, text) {
+            document.getElementById('loaderTitle').textContent = title || 'Analyse en cours...';
+            document.getElementById('loaderText').textContent = text || 'Veuillez patienter.';
+            document.getElementById('loaderOverlay').style.display = 'flex';
+        }
 
-function hideLoader() {
-    document.getElementById('loaderOverlay').style.display = 'none';
-}
+        function hideLoader() {
+            document.getElementById('loaderOverlay').style.display = 'none';
+        }
 
-function showToast(message, type = 'info') {
-    const container = document.getElementById('toastContainer');
-    const colors = { info: '#6366f1', success: '#10b981', warning: '#f59e0b', error: '#ef4444' };
-    const icons = { info: 'fa-circle-info', success: 'fa-circle-check', warning: 'fa-triangle-exclamation', error: 'fa-circle-xmark' };
-    const toast = document.createElement('div');
-    toast.className = 'custom-toast';
-    toast.style.borderLeftColor = colors[type] || colors.info;
-    toast.innerHTML = `<i class="fas ${icons[type] || icons.info}" style="color:${colors[type]};font-size:20px;"></i>
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const colors = {
+                info: '#6366f1',
+                success: '#10b981',
+                warning: '#f59e0b',
+                error: '#ef4444'
+            };
+            const icons = {
+                info: 'fa-circle-info',
+                success: 'fa-circle-check',
+                warning: 'fa-triangle-exclamation',
+                error: 'fa-circle-xmark'
+            };
+            const toast = document.createElement('div');
+            toast.className = 'custom-toast';
+            toast.style.borderLeftColor = colors[type] || colors.info;
+            toast.innerHTML = `<i class="fas ${icons[type] || icons.info}" style="color:${colors[type]};font-size:20px;"></i>
         <div><div class="fw-semibold" style="font-size:14px;">${message}</div></div>`;
-    container.appendChild(toast);
-    setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 4000);
-}
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
 
-function formatSize(bytes) {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / 1048576).toFixed(1) + ' MB';
-}
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
+        }
 
-function getFileIcon(name) {
-    const ext = name.split('.').pop().toLowerCase();
-    const map = { py: 'fa-file-code fab fa-python', js: 'fa-file-code fab fa-js', java: 'fa-file-code fab fa-java',
-        pdf: 'fa-file-pdf fas', docx: 'fa-file-word fas', txt: 'fa-file-lines fas', md: 'fa-file-lines fas',
-        png: 'fa-file-image fas', jpg: 'fa-file-image fas', jpeg: 'fa-file-image fas', gif: 'fa-file-image fas',
-        zip: 'fa-file-zipper fas', c: 'fa-file-code fas', cpp: 'fa-file-code fas', html: 'fa-file-code fab fa-html5',
-        css: 'fa-file-code fab fa-css3-alt', php: 'fa-file-code fab fa-php', sql: 'fa-database fas' };
-    return map[ext] || 'fa-file fas';
-}
+        function getFileIcon(name) {
+            const ext = name.split('.').pop().toLowerCase();
+            const map = {
+                py: 'fa-file-code fab fa-python',
+                js: 'fa-file-code fab fa-js',
+                java: 'fa-file-code fab fa-java',
+                pdf: 'fa-file-pdf fas',
+                docx: 'fa-file-word fas',
+                txt: 'fa-file-lines fas',
+                md: 'fa-file-lines fas',
+                png: 'fa-file-image fas',
+                jpg: 'fa-file-image fas',
+                jpeg: 'fa-file-image fas',
+                gif: 'fa-file-image fas',
+                zip: 'fa-file-zipper fas',
+                c: 'fa-file-code fas',
+                cpp: 'fa-file-code fas',
+                html: 'fa-file-code fab fa-html5',
+                css: 'fa-file-code fab fa-css3-alt',
+                php: 'fa-file-code fab fa-php',
+                sql: 'fa-database fas'
+            };
+            return map[ext] || 'fa-file fas';
+        }
 
-function getFileTypeBadge(type) {
-    const m = { text: 'primary', code: 'success', image: 'info' };
-    return `<span class="badge bg-${m[type] || 'secondary'}">${type}</span>`;
-}
+        function getFileTypeBadge(type) {
+            const m = {
+                text: 'primary',
+                code: 'success',
+                image: 'info'
+            };
+            return `<span class="badge bg-${m[type] || 'secondary'}">${type}</span>`;
+        }
 
-function getScoreBadge(level, score) {
-    return `<span class="score-badge ${level}">${level.toUpperCase()} ${Math.round(score * 100)}%</span>`;
-}
+        function getScoreBadge(level, score) {
+            return `<span class="score-badge ${level}">${level.toUpperCase()} ${Math.round(score * 100)}%</span>`;
+        }
 
-function getEngineBarColor(score) {
-    if (score >= 0.7) return '#ef4444';
-    if (score >= 0.5) return '#f59e0b';
-    if (score >= 0.3) return '#0ea5e9';
-    return '#10b981';
-}
+        function getEngineBarColor(score) {
+            if (score >= 0.7) return '#ef4444';
+            if (score >= 0.5) return '#f59e0b';
+            if (score >= 0.3) return '#0ea5e9';
+            return '#10b981';
+        }
 
-function toggleDarkMode() {
-    const html = document.documentElement;
-    const icon = document.getElementById('darkModeIcon');
-    if (html.getAttribute('data-bs-theme') === 'dark') {
-        html.setAttribute('data-bs-theme', 'light');
-        icon.classList.replace('fa-sun', 'fa-moon');
-    } else {
-        html.setAttribute('data-bs-theme', 'dark');
-        icon.classList.replace('fa-moon', 'fa-sun');
-    }
-}
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('darkModeIcon');
+            if (html.getAttribute('data-bs-theme') === 'dark') {
+                html.setAttribute('data-bs-theme', 'light');
+                icon.classList.replace('fa-sun', 'fa-moon');
+            } else {
+                html.setAttribute('data-bs-theme', 'dark');
+                icon.classList.replace('fa-moon', 'fa-sun');
+            }
+        }
 
-// ===========================================================================
-// PAGE NAVIGATION
-// ===========================================================================
-function showPage(page) {
-    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-    document.getElementById('page-' + page)?.classList.add('active');
-    document.querySelectorAll('.sidebar-nav .nav-link').forEach(l => l.classList.remove('active'));
-    document.querySelector(`.sidebar-nav .nav-link[data-page="${page}"]`)?.classList.add('active');
-    const titles = { dashboard: 'Dashboard', upload: 'Analyser un fichier', 'upload-zip': 'Analyser un ZIP', database: 'Corpus', settings: 'Configuration' };
-    document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
-    // Auto-load data
-    if (page === 'dashboard') loadStats();
-    if (page === 'database') loadDatabase();
-    // Close mobile sidebar
-    document.getElementById('sidebar').classList.remove('show');
-}
+        // ===========================================================================
+        // PAGE NAVIGATION
+        // ===========================================================================
+        function showPage(page) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('page-' + page)?.classList.add('active');
+            document.querySelectorAll('.sidebar-nav .nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelector(`.sidebar-nav .nav-link[data-page="${page}"]`)?.classList.add('active');
+            const titles = {
+                dashboard: 'Dashboard',
+                upload: 'Analyser un fichier',
+                'upload-zip': 'Analyser un ZIP',
+                database: 'Corpus',
+                settings: 'Configuration'
+            };
+            document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
+            // Auto-load data
+            if (page === 'dashboard') loadStats();
+            if (page === 'database') loadDatabase();
+            // Close mobile sidebar
+            document.getElementById('sidebar').classList.remove('show');
+        }
 
-// ===========================================================================
-// DRAG & DROP
-// ===========================================================================
-function setupDropZone(zoneId, inputId, handleFn) {
-    const zone = document.getElementById(zoneId);
-    if (!zone) return;
-    ['dragenter', 'dragover'].forEach(e => zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.add('drag-over'); }));
-    ['dragleave', 'drop'].forEach(e => zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.remove('drag-over'); }));
-    zone.addEventListener('drop', ev => { if (ev.dataTransfer.files.length) handleFn({ target: { files: ev.dataTransfer.files } }); });
-}
+        // ===========================================================================
+        // DRAG & DROP
+        // ===========================================================================
+        function setupDropZone(zoneId, inputId, handleFn) {
+            const zone = document.getElementById(zoneId);
+            if (!zone) return;
+            ['dragenter', 'dragover'].forEach(e => zone.addEventListener(e, ev => {
+                ev.preventDefault();
+                zone.classList.add('drag-over');
+            }));
+            ['dragleave', 'drop'].forEach(e => zone.addEventListener(e, ev => {
+                ev.preventDefault();
+                zone.classList.remove('drag-over');
+            }));
+            zone.addEventListener('drop', ev => {
+                if (ev.dataTransfer.files.length) handleFn({
+                    target: {
+                        files: ev.dataTransfer.files
+                    }
+                });
+            });
+        }
 
-setupDropZone('fileDropZone', 'fileInput', handleFileSelect);
-setupDropZone('zipDropZone', 'zipInput', handleZipSelect);
+        setupDropZone('fileDropZone', 'fileInput', handleFileSelect);
+        setupDropZone('zipDropZone', 'zipInput', handleZipSelect);
 
-// ===========================================================================
-// FILE UPLOAD
-// ===========================================================================
-function handleFileSelect(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    selectedFile = file;
-    document.getElementById('filePreview').style.display = 'block';
-    document.getElementById('filePreviewName').textContent = file.name;
-    document.getElementById('filePreviewSize').textContent = formatSize(file.size);
-    document.getElementById('filePreviewIcon').innerHTML = `<i class="${getFileIcon(file.name)}"></i>`;
-    document.getElementById('btnAnalyzeFile').disabled = false;
-}
+        // ===========================================================================
+        // FILE UPLOAD
+        // ===========================================================================
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            selectedFile = file;
+            document.getElementById('filePreview').style.display = 'block';
+            document.getElementById('filePreviewName').textContent = file.name;
+            document.getElementById('filePreviewSize').textContent = formatSize(file.size);
+            document.getElementById('filePreviewIcon').innerHTML = `<i class="${getFileIcon(file.name)}"></i>`;
+            document.getElementById('btnAnalyzeFile').disabled = false;
+        }
 
-function clearFileSelection() {
-    selectedFile = null;
-    document.getElementById('fileInput').value = '';
-    document.getElementById('filePreview').style.display = 'none';
-    document.getElementById('btnAnalyzeFile').disabled = true;
-}
+        function clearFileSelection() {
+            selectedFile = null;
+            document.getElementById('fileInput').value = '';
+            document.getElementById('filePreview').style.display = 'none';
+            document.getElementById('btnAnalyzeFile').disabled = true;
+        }
 
-// ===========================================================================
-// ZIP UPLOAD
-// ===========================================================================
-function handleZipSelect(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    if (!file.name.endsWith('.zip')) { showToast('Seuls les fichiers .zip sont acceptes', 'warning'); return; }
-    selectedZip = file;
-    document.getElementById('zipPreview').style.display = 'block';
-    document.getElementById('zipPreviewName').textContent = file.name;
-    document.getElementById('zipPreviewSize').textContent = formatSize(file.size);
-    document.getElementById('btnAnalyzeZip').disabled = false;
-}
+        // ===========================================================================
+        // ZIP UPLOAD
+        // ===========================================================================
+        function handleZipSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!file.name.endsWith('.zip')) {
+                showToast('Seuls les fichiers .zip sont acceptes', 'warning');
+                return;
+            }
+            selectedZip = file;
+            document.getElementById('zipPreview').style.display = 'block';
+            document.getElementById('zipPreviewName').textContent = file.name;
+            document.getElementById('zipPreviewSize').textContent = formatSize(file.size);
+            document.getElementById('btnAnalyzeZip').disabled = false;
+        }
 
-function clearZipSelection() {
-    selectedZip = null;
-    document.getElementById('zipInput').value = '';
-    document.getElementById('zipPreview').style.display = 'none';
-    document.getElementById('btnAnalyzeZip').disabled = true;
-}
+        function clearZipSelection() {
+            selectedZip = null;
+            document.getElementById('zipInput').value = '';
+            document.getElementById('zipPreview').style.display = 'none';
+            document.getElementById('btnAnalyzeZip').disabled = true;
+        }
 
-// ===========================================================================
-// ANALYZE FILE
-// ===========================================================================
-async function analyzeFile() {
-    if (!selectedFile) return;
-    const form = new FormData();
-    form.append('file', selectedFile);
-    form.append('use_semantic', document.getElementById('optSemantic').checked);
-    form.append('use_winnowing', document.getElementById('optWinnowing').checked);
-    form.append('use_ast', document.getElementById('optAst').checked);
-    form.append('use_lcs', document.getElementById('optLcs').checked);
+        // ===========================================================================
+        // ANALYZE FILE
+        // ===========================================================================
+        async function analyzeFile() {
+            if (!selectedFile) return;
+            const form = new FormData();
+            form.append('file', selectedFile);
+            form.append('use_semantic', document.getElementById('optSemantic').checked);
+            form.append('use_winnowing', document.getElementById('optWinnowing').checked);
+            form.append('use_ast', document.getElementById('optAst').checked);
+            form.append('use_lcs', document.getElementById('optLcs').checked);
 
-    showLoader('Analyse en cours...', `Analyse de ${selectedFile.name}...`);
-    try {
-        const res = await fetch(`${getApiUrl()}/api/check`, { method: 'POST', body: form });
-        const json = await res.json();
-        hideLoader();
-        if (json.success) { displayFileResults(json.data); showToast('Analyse terminee !', 'success'); }
-        else { showToast('Erreur: ' + (json.message || 'Inconnue'), 'error'); }
-    } catch (e) {
-        hideLoader();
-        showToast('Erreur de connexion a l\'API : ' + e.message, 'error');
-    }
-}
+            showLoader('Analyse en cours...', `Analyse de ${selectedFile.name}...`);
+            try {
+                const res = await fetch(`${getApiUrl()}/api/check`, {
+                    method: 'POST',
+                    body: form
+                });
+                const json = await res.json();
+                hideLoader();
+                if (json.success) {
+                    displayFileResults(json.data);
+                    showToast('Analyse terminee !', 'success');
+                } else {
+                    showToast('Erreur: ' + (json.message || 'Inconnue'), 'error');
+                }
+            } catch (e) {
+                hideLoader();
+                showToast('Erreur de connexion a l\'API : ' + e.message, 'error');
+            }
+        }
 
 
-function displayFileResults(data) {
-    document.getElementById('resultsCard').style.display = 'block';
-    document.getElementById('resultsPlaceholder').style.display = 'none';
-    document.getElementById('resultOverallBadge').className = 'score-badge ' + data.overall_level;
-    document.getElementById('resultOverallBadge').innerHTML = `${data.overall_level.toUpperCase()} ${Math.round(data.overall_score * 100)}%`;
+        function displayFileResults(data) {
+            document.getElementById('resultsCard').style.display = 'block';
+            document.getElementById('resultsPlaceholder').style.display = 'none';
+            document.getElementById('resultOverallBadge').className = 'score-badge ' + data.overall_level;
+            document.getElementById('resultOverallBadge').innerHTML =
+                `${data.overall_level.toUpperCase()} ${Math.round(data.overall_score * 100)}%`;
 
-    let html = '';
-    // Info bar
-    html += `<div class="result-card mb-3">
+            let html = '';
+            // Info bar
+            html += `<div class="result-card mb-3">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div class="d-flex align-items-center gap-3">
                 <div class="stat-icon card-stat-purple" style="width:42px;height:42px;font-size:18px;"><i class="${getFileIcon(data.filename)}"></i></div>
@@ -934,108 +1418,120 @@ function displayFileResults(data) {
         </div>
     </div>`;
 
-    // Summary badges
-    const ca = data.content_analysis || {};
-    if (ca.summary) {
-        html += `<div class="d-flex gap-2 flex-wrap mb-3">`;
-        html += buildSummaryBadge('Critique', ca.summary.critical, 'danger');
-        html += buildSummaryBadge('Eleve', ca.summary.high, 'warning');
-        html += buildSummaryBadge('Moyen', ca.summary.medium, 'info');
-        html += buildSummaryBadge('Faible', ca.summary.low, 'secondary');
-        html += `</div>`;
-    }
+            // Summary badges
+            const ca = data.content_analysis || {};
+            if (ca.summary) {
+                html += `<div class="d-flex gap-2 flex-wrap mb-3">`;
+                html += buildSummaryBadge('Critique', ca.summary.critical, 'danger');
+                html += buildSummaryBadge('Eleve', ca.summary.high, 'warning');
+                html += buildSummaryBadge('Moyen', ca.summary.medium, 'info');
+                html += buildSummaryBadge('Faible', ca.summary.low, 'secondary');
+                html += `</div>`;
+            }
 
-    // Text matches
-    if (ca.text_matches && ca.text_matches.length > 0) {
-        html += `<h6 class="fw-bold mb-2"><i class="fas fa-file-lines me-2"></i>Resultats texte (${ca.text_matches.length} matchs)</h6>`;
-        ca.text_matches.forEach(m => {
-            html += `<div class="result-card">
+            // Text matches
+            if (ca.text_matches && ca.text_matches.length > 0) {
+                html +=
+                    `<h6 class="fw-bold mb-2"><i class="fas fa-file-lines me-2"></i>Resultats texte (${ca.text_matches.length} matchs)</h6>`;
+                ca.text_matches.forEach(m => {
+                    html += `<div class="result-card">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
                         <div class="fw-semibold">${m.filename} ${getFileTypeBadge(m.file_type)}</div>
                     </div>
                     ${getScoreBadge(m.level, m.combined_score)}
                 </div>`;
-            // Engine bars
-            if (m.engines) {
-                html += `<div class="row g-1 mb-2">`;
-                for (const [engine, info] of Object.entries(m.engines)) {
-                    const pct = Math.round((info.raw || 0) * 100);
-                    html += `<div class="col-6">
+                    // Engine bars
+                    if (m.engines) {
+                        html += `<div class="row g-1 mb-2">`;
+                        for (const [engine, info] of Object.entries(m.engines)) {
+                            const pct = Math.round((info.raw || 0) * 100);
+                            html += `<div class="col-6">
                         <div class="d-flex justify-content-between" style="font-size:12px;">
                             <span class="text-muted text-capitalize">${engine}</span>
                             <span class="fw-semibold">${pct}%</span>
                         </div>
                         <div class="engine-bar mt-1"><div class="engine-bar-fill" style="width:${pct}%;background:${getEngineBarColor(info.raw || 0)};"></div></div>
                     </div>`;
-                }
-                html += `</div>`;
+                        }
+                        html += `</div>`;
+                    }
+                    // Suspicious sections
+                    if (m.suspicious_sections && m.suspicious_sections.length > 0) {
+                        html +=
+                            `<div class="mt-2"><small class="text-muted"><i class="fas fa-exclamation-circle me-1"></i>${m.suspicious_sections.length} section(s) suspecte(s)</small></div>`;
+                    }
+                    html += `</div>`;
+                });
+            } else {
+                html +=
+                    `<div class="result-card"><div class="text-center text-muted py-2"><i class="fas fa-check-circle me-1"></i>Aucun match texte trouve</div></div>`;
             }
-            // Suspicious sections
-            if (m.suspicious_sections && m.suspicious_sections.length > 0) {
-                html += `<div class="mt-2"><small class="text-muted"><i class="fas fa-exclamation-circle me-1"></i>${m.suspicious_sections.length} section(s) suspecte(s)</small></div>`;
-            }
-            html += `</div>`;
-        });
-    } else {
-        html += `<div class="result-card"><div class="text-center text-muted py-2"><i class="fas fa-check-circle me-1"></i>Aucun match texte trouve</div></div>`;
-    }
 
-    // Image analysis
-    const ia = data.image_analysis || {};
-    if (ia.analyzed && ia.image_matches && ia.image_matches.length > 0) {
-        html += `<h6 class="fw-bold mt-3 mb-2"><i class="fas fa-image me-2"></i>Matchs images (${ia.image_matches.length})</h6>`;
-        ia.image_matches.forEach(img => {
-            html += `<div class="result-card">
+            // Image analysis
+            const ia = data.image_analysis || {};
+            if (ia.analyzed && ia.image_matches && ia.image_matches.length > 0) {
+                html +=
+                    `<h6 class="fw-bold mt-3 mb-2"><i class="fas fa-image me-2"></i>Matchs images (${ia.image_matches.length})</h6>`;
+                ia.image_matches.forEach(img => {
+                    html += `<div class="result-card">
                 <div class="d-flex justify-content-between align-items-center">
                     <span><i class="fas fa-image me-2"></i>${img.matched_filename}</span>
                     ${getScoreBadge(img.level, img.confidence)}
                 </div>
             </div>`;
-        });
-    }
+                });
+            }
 
-    document.getElementById('resultsBody').innerHTML = html;
-}
+            document.getElementById('resultsBody').innerHTML = html;
+        }
 
-function buildSummaryBadge(label, count, color) {
-    if (!count) return '';
-    return `<span class="badge bg-${color} px-3 py-2">${label}: ${count}</span>`;
-}
+        function buildSummaryBadge(label, count, color) {
+            if (!count) return '';
+            return `<span class="badge bg-${color} px-3 py-2">${label}: ${count}</span>`;
+        }
 
-// ===========================================================================
-// ANALYZE ZIP
-// ===========================================================================
-async function analyzeZip() {
-    if (!selectedZip) return;
-    const form = new FormData();
-    form.append('file', selectedZip);
-    form.append('cross_compare', document.getElementById('optZipCross').checked);
-    form.append('add_to_database', document.getElementById('optZipAddDb').checked);
+        // ===========================================================================
+        // ANALYZE ZIP
+        // ===========================================================================
+        async function analyzeZip() {
+            if (!selectedZip) return;
+            const form = new FormData();
+            form.append('file', selectedZip);
+            form.append('cross_compare', document.getElementById('optZipCross').checked);
+            form.append('add_to_database', document.getElementById('optZipAddDb').checked);
 
-    showLoader('Analyse ZIP en cours...', `Traitement de ${selectedZip.name}... Cela peut prendre un moment.`);
-    try {
-        const res = await fetch(`${getApiUrl()}/api/check-zip`, { method: 'POST', body: form });
-        const json = await res.json();
-        hideLoader();
-        if (json.success) { displayZipResults(json.data); showToast('Analyse ZIP terminee !', 'success'); }
-        else { showToast('Erreur: ' + (json.message || 'Inconnue'), 'error'); }
-    } catch (e) {
-        hideLoader();
-        showToast('Erreur de connexion : ' + e.message, 'error');
-    }
-}
+            showLoader('Analyse ZIP en cours...', `Traitement de ${selectedZip.name}... Cela peut prendre un moment.`);
+            try {
+                const res = await fetch(`${getApiUrl()}/api/check-zip`, {
+                    method: 'POST',
+                    body: form
+                });
+                const json = await res.json();
+                hideLoader();
+                if (json.success) {
+                    displayZipResults(json.data);
+                    showToast('Analyse ZIP terminee !', 'success');
+                } else {
+                    showToast('Erreur: ' + (json.message || 'Inconnue'), 'error');
+                }
+            } catch (e) {
+                hideLoader();
+                showToast('Erreur de connexion : ' + e.message, 'error');
+            }
+        }
 
-function displayZipResults(data) {
-    document.getElementById('zipResultsCard').style.display = 'block';
-    document.getElementById('zipResultsPlaceholder').style.display = 'none';
-    document.getElementById('zipOverallBadge').className = 'score-badge ' + data.overall_level;
-    document.getElementById('zipOverallBadge').innerHTML = `${data.overall_level.toUpperCase()} ${Math.round(data.overall_score * 100)}%`;
+        function displayZipResults(data) {
+            document.getElementById('zipResultsCard').style.display = 'block';
+            document.getElementById('zipResultsPlaceholder').style.display = 'none';
+            document.getElementById('zipOverallBadge').className = 'score-badge ' + data.overall_level;
+            document.getElementById('zipOverallBadge').innerHTML =
+                `${data.overall_level.toUpperCase()} ${Math.round(data.overall_score * 100)}%`;
 
-    let html = '';
+            let html = '';
 
-    // Header info
-    html += `<div class="result-card mb-3">
+            // Header info
+            html += `<div class="result-card mb-3">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div class="d-flex align-items-center gap-3">
                 <div class="stat-icon card-stat-blue" style="width:42px;height:42px;font-size:18px;"><i class="fas fa-file-zipper"></i></div>
@@ -1052,36 +1548,38 @@ function displayZipResults(data) {
         </div>
     </div>`;
 
-    // Timing
-    if (data.timing) {
-        html += `<div class="d-flex gap-3 mb-3">
+            // Timing
+            if (data.timing) {
+                html += `<div class="d-flex gap-3 mb-3">
             <small class="text-muted"><i class="fas fa-clock me-1"></i>Extraction: ${data.timing.extraction_seconds}s</small>
             <small class="text-muted"><i class="fas fa-clock me-1"></i>Croisee: ${data.timing.cross_compare_seconds || 0}s</small>
             <small class="text-muted"><i class="fas fa-clock me-1"></i>Total: ${data.timing.total_seconds}s</small>
         </div>`;
-    }
+            }
 
-    // Files extracted list
-    if (data.files_extracted && data.files_extracted.length > 0) {
-        html += `<h6 class="fw-bold mb-2"><i class="fas fa-folder-open me-2"></i>Fichiers extraits (${data.files_extracted.length})</h6>`;
-        html += `<div class="mb-3" style="max-height:200px;overflow-y:auto;">`;
-        data.files_extracted.forEach(f => {
-            html += `<div class="d-flex align-items-center gap-2 py-1" style="font-size:13px;">
+            // Files extracted list
+            if (data.files_extracted && data.files_extracted.length > 0) {
+                html +=
+                    `<h6 class="fw-bold mb-2"><i class="fas fa-folder-open me-2"></i>Fichiers extraits (${data.files_extracted.length})</h6>`;
+                html += `<div class="mb-3" style="max-height:200px;overflow-y:auto;">`;
+                data.files_extracted.forEach(f => {
+                    html += `<div class="d-flex align-items-center gap-2 py-1" style="font-size:13px;">
                 <i class="${getFileIcon(f.filename)}" style="width:16px;text-align:center;color:#64748b;"></i>
                 <span>${f.filename}</span>
                 ${getFileTypeBadge(f.file_type)}
                 <small class="text-muted ms-auto">${formatSize(f.content_length || 0)}</small>
             </div>`;
-        });
-        html += `</div>`;
-    }
+                });
+                html += `</div>`;
+            }
 
-    // Per-file database analysis
-    const pf = data.per_file_database_analysis || [];
-    if (pf.length > 0) {
-        html += `<h6 class="fw-bold mb-2"><i class="fas fa-database me-2"></i>Analyse par fichier vs Corpus (${pf.length})</h6>`;
-        pf.forEach(r => {
-            html += `<div class="result-card">
+            // Per-file database analysis
+            const pf = data.per_file_database_analysis || [];
+            if (pf.length > 0) {
+                html +=
+                    `<h6 class="fw-bold mb-2"><i class="fas fa-database me-2"></i>Analyse par fichier vs Corpus (${pf.length})</h6>`;
+                pf.forEach(r => {
+                    html += `<div class="result-card">
                 <div class="d-flex justify-content-between align-items-start mb-1">
                     <div>
                         <div class="fw-semibold" style="font-size:14px;">${r.filename}</div>
@@ -1089,25 +1587,26 @@ function displayZipResults(data) {
                     </div>
                     ${getScoreBadge(r.max_level, r.max_score)}
                 </div>`;
-            // Top matches
-            if (r.matches && r.matches.length > 0) {
-                r.matches.forEach(m => {
-                    html += `<div class="d-flex justify-content-between align-items-center py-1 px-2 mt-1 rounded" style="background:#f8fafc;font-size:13px;">
+                    // Top matches
+                    if (r.matches && r.matches.length > 0) {
+                        r.matches.forEach(m => {
+                            html += `<div class="d-flex justify-content-between align-items-center py-1 px-2 mt-1 rounded" style="background:#f8fafc;font-size:13px;">
                         <span><i class="fas fa-arrow-right me-1" style="color:var(--primary);"></i>${m.filename}</span>
                         ${getScoreBadge(m.level, m.combined_score)}
                     </div>`;
+                        });
+                    }
+                    html += `</div>`;
                 });
             }
-            html += `</div>`;
-        });
-    }
 
-    // Cross-file analysis
-    const cf = data.cross_file_analysis || [];
-    if (cf.length > 0) {
-        html += `<h6 class="fw-bold mt-3 mb-2"><i class="fas fa-code-compare me-2"></i>Comparaison croisee (${cf.length})</h6>`;
-        cf.forEach(c => {
-            html += `<div class="result-card">
+            // Cross-file analysis
+            const cf = data.cross_file_analysis || [];
+            if (cf.length > 0) {
+                html +=
+                    `<h6 class="fw-bold mt-3 mb-2"><i class="fas fa-code-compare me-2"></i>Comparaison croisee (${cf.length})</h6>`;
+                cf.forEach(c => {
+                    html += `<div class="result-card">
                 <div class="d-flex justify-content-between align-items-center">
                     <div style="font-size:14px;">
                         <span class="fw-semibold">${c.file_a}</span>
@@ -1117,131 +1616,196 @@ function displayZipResults(data) {
                     ${getScoreBadge(c.level, c.combined_score)}
                 </div>
             </div>`;
-        });
-    }
+                });
+            }
 
-    document.getElementById('zipResultsBody').innerHTML = html;
-}
-
-// ===========================================================================
-// HEALTH CHECK
-// ===========================================================================
-async function checkHealth() {
-    const url = getApiUrl();
-    try {
-        const res = await fetch(`${url}/api/health`, { signal: AbortSignal.timeout(5000) });
-        const json = await res.json();
-        const dot = document.getElementById('statusDot');
-        const text = document.getElementById('statusText');
-        if (json.success) {
-            dot.className = 'status-dot online';
-            text.textContent = 'Connecte';
-            showToast('API connectee avec succes !', 'success');
-            renderHealthPanel(json.data);
+            document.getElementById('zipResultsBody').innerHTML = html;
         }
-    } catch (e) {
-        document.getElementById('statusDot').className = 'status-dot offline';
-        document.getElementById('statusText').textContent = 'Deconnecte';
-        showToast('Impossible de connecter a l\'API', 'error');
-    }
-}
 
-function renderHealthPanel(d) {
-    let html = `<div class="space-y-2">`;
-    const items = [
-        { label: 'Version', value: d.version || '-', icon: 'fa-tag' },
-        { label: 'NLP', value: d.nlp ? '<span class="badge bg-success">OK</span>' : '<span class="badge bg-danger">Non</span>', icon: 'fa-language' },
-        { label: 'Semantic', value: d.semantic ? '<span class="badge bg-success">OK</span>' : '<span class="badge bg-danger">Non</span>', icon: 'fa-brain' },
-        { label: 'PDF', value: d.pdf_extraction ? '<span class="badge bg-success">OK</span>' : '<span class="badge bg-secondary">Non</span>', icon: 'fa-file-pdf' },
-        { label: 'Word', value: d.word_extraction ? '<span class="badge bg-success">OK</span>' : '<span class="badge bg-secondary">Non</span>', icon: 'fa-file-word' },
-        { label: 'Images', value: d.image_comparison ? '<span class="badge bg-success">OK</span>' : '<span class="badge bg-secondary">Non</span>', icon: 'fa-image' },
-        { label: 'Corpus', value: d.corpus_size ?? '-', icon: 'fa-database' },
-    ];
-    items.forEach(it => {
-        html += `<div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color:#f1f5f9 !important;">
+        // ===========================================================================
+        // HEALTH CHECK
+        // ===========================================================================
+        async function checkHealth() {
+            const url = getApiUrl();
+            try {
+                const res = await fetch(`${url}/api/health`, {
+                    signal: AbortSignal.timeout(5000)
+                });
+                const json = await res.json();
+                const dot = document.getElementById('statusDot');
+                const text = document.getElementById('statusText');
+                if (json.success) {
+                    dot.className = 'status-dot online';
+                    text.textContent = 'Connecte';
+                    showToast('API connectee avec succes !', 'success');
+                    renderHealthPanel(json.data);
+                }
+            } catch (e) {
+                document.getElementById('statusDot').className = 'status-dot offline';
+                document.getElementById('statusText').textContent = 'Deconnecte';
+                showToast('Impossible de connecter a l\'API', 'error');
+            }
+        }
+
+        function renderHealthPanel(d) {
+            let html = `<div class="space-y-2">`;
+            const items = [{
+                    label: 'Version',
+                    value: d.version || '-',
+                    icon: 'fa-tag'
+                },
+                {
+                    label: 'NLP',
+                    value: d.nlp ? '<span class="badge bg-success">OK</span>' :
+                        '<span class="badge bg-danger">Non</span>',
+                    icon: 'fa-language'
+                },
+                {
+                    label: 'Semantic',
+                    value: d.semantic ? '<span class="badge bg-success">OK</span>' :
+                        '<span class="badge bg-danger">Non</span>',
+                    icon: 'fa-brain'
+                },
+                {
+                    label: 'PDF',
+                    value: d.pdf_extraction ? '<span class="badge bg-success">OK</span>' :
+                        '<span class="badge bg-secondary">Non</span>',
+                    icon: 'fa-file-pdf'
+                },
+                {
+                    label: 'Word',
+                    value: d.word_extraction ? '<span class="badge bg-success">OK</span>' :
+                        '<span class="badge bg-secondary">Non</span>',
+                    icon: 'fa-file-word'
+                },
+                {
+                    label: 'Images',
+                    value: d.image_comparison ? '<span class="badge bg-success">OK</span>' :
+                        '<span class="badge bg-secondary">Non</span>',
+                    icon: 'fa-image'
+                },
+                {
+                    label: 'Corpus',
+                    value: d.corpus_size ?? '-',
+                    icon: 'fa-database'
+                },
+            ];
+            items.forEach(it => {
+                html += `<div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color:#f1f5f9 !important;">
             <span class="text-muted"><i class="fas ${it.icon} me-2" style="width:16px;"></i>${it.label}</span>
             <span>${it.value}</span>
         </div>`;
-    });
-    html += `</div>`;
-    document.getElementById('healthPanel').innerHTML = html;
-}
+            });
+            html += `</div>`;
+            document.getElementById('healthPanel').innerHTML = html;
+        }
 
-// ===========================================================================
-// STATS
-// ===========================================================================
-async function loadStats() {
-    try {
-        const res = await fetch(`${getApiUrl()}/api/stats`);
-        const json = await res.json();
-        if (!json.success) return;
-        const d = json.data;
-        document.getElementById('statTotal').textContent = d.total;
-        document.getElementById('statText').textContent = d.text;
-        document.getElementById('statCode').textContent = d.code;
-        document.getElementById('statImages').textContent = d.image;
-        renderCorpusChart(d);
-    } catch (e) { /* API offline */ }
-}
+        // ===========================================================================
+        // STATS
+        // ===========================================================================
+        async function loadStats() {
+            try {
+                const res = await fetch(`${getApiUrl()}/api/stats`);
+                const json = await res.json();
+                if (!json.success) return;
+                const d = json.data;
+                document.getElementById('statTotal').textContent = d.total;
+                document.getElementById('statText').textContent = d.text;
+                document.getElementById('statCode').textContent = d.code;
+                document.getElementById('statImages').textContent = d.image;
+                renderCorpusChart(d);
+            } catch (e) {
+                /* API offline */
+            }
+        }
 
-function renderCorpusChart(d) {
-    const ctx = document.getElementById('corpusChart');
-    if (!ctx) return;
-    if (corpusChart) corpusChart.destroy();
-    const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
-    const textColor = isDark ? '#94a3b8' : '#64748b';
-    const gridColor = isDark ? '#334155' : '#e2e8f0';
+        function renderCorpusChart(d) {
+            const ctx = document.getElementById('corpusChart');
+            if (!ctx) return;
+            if (corpusChart) corpusChart.destroy();
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+            const gridColor = isDark ? '#334155' : '#e2e8f0';
 
-    corpusChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Texte', 'Code', 'Images', 'Total caracteres'],
-            datasets: [{
-                label: 'Corpus',
-                data: [d.text, d.code, d.image, Math.round(d.total_chars / 1000)],
-                backgroundColor: ['#6366f1', '#10b981', '#0ea5e9', '#f59e0b'],
-                borderRadius: 8, borderSkipped: false,
-            }]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: function(ctx) {
-                            return ctx.dataIndex === 3 ? (ctx.raw * 1000).toLocaleString() + ' chars' : ctx.raw + ' fichiers';
+            corpusChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Texte', 'Code', 'Images', 'Total caracteres'],
+                    datasets: [{
+                        label: 'Corpus',
+                        data: [d.text, d.code, d.image, Math.round(d.total_chars / 1000)],
+                        backgroundColor: ['#6366f1', '#10b981', '#0ea5e9', '#f59e0b'],
+                        borderRadius: 8,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(ctx) {
+                                    return ctx.dataIndex === 3 ? (ctx.raw * 1000).toLocaleString() + ' chars' :
+                                        ctx.raw + ' fichiers';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: textColor,
+                                font: {
+                                    weight: '500'
+                                }
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: gridColor
+                            },
+                            ticks: {
+                                color: textColor
+                            },
+                            beginAtZero: true
                         }
                     }
                 }
-            },
-            scales: {
-                x: { grid: { display: false }, ticks: { color: textColor, font: { weight: '500' } } },
-                y: { grid: { color: gridColor }, ticks: { color: textColor }, beginAtZero: true }
-            }
+            });
         }
-    });
-}
 
-// ===========================================================================
-// DATABASE
-// ===========================================================================
-async function loadDatabase() {
-    const panel = document.getElementById('databaseContent');
-    panel.innerHTML = '<div class="text-center py-3"><div class="spinner-ring" style="width:32px;height:32px;border-width:3px;margin:0 auto 12px;"></div><p class="text-muted">Chargement...</p></div>';
-    try {
-        const res = await fetch(`${getApiUrl()}/api/list?limit=100`);
-        const json = await res.json();
-        if (!json.success) { panel.innerHTML = '<div class="text-center text-muted py-3">Erreur</div>'; return; }
-        const items = json.data;
-        if (items.length === 0) {
-            panel.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p class="mt-2">Le corpus est vide.</p></div>';
-            return;
-        }
-        let html = `<div class="table-responsive"><table class="table table-modern">
+        // ===========================================================================
+        // DATABASE
+        // ===========================================================================
+        async function loadDatabase() {
+            const panel = document.getElementById('databaseContent');
+            panel.innerHTML =
+                '<div class="text-center py-3"><div class="spinner-ring" style="width:32px;height:32px;border-width:3px;margin:0 auto 12px;"></div><p class="text-muted">Chargement...</p></div>';
+            try {
+                const res = await fetch(`${getApiUrl()}/api/list?limit=100`);
+                const json = await res.json();
+                if (!json.success) {
+                    panel.innerHTML = '<div class="text-center text-muted py-3">Erreur</div>';
+                    return;
+                }
+                const items = json.data;
+                if (items.length === 0) {
+                    panel.innerHTML =
+                        '<div class="empty-state"><i class="fas fa-inbox"></i><p class="mt-2">Le corpus est vide.</p></div>';
+                    return;
+                }
+                let html =
+                    `<div class="table-responsive"><table class="table table-modern">
             <thead><tr><th></th><th>Fichier</th><th>Type</th><th>Taille</th><th>Images</th><th>Action</th></tr></thead><tbody>`;
-        items.forEach(item => {
-            html += `<tr>
+                items.forEach(item => {
+                    html += `<tr>
                 <td><i class="${getFileIcon(item.filename)}" style="color:#64748b;"></i></td>
                 <td class="fw-semibold">${item.filename}</td>
                 <td>${getFileTypeBadge(item.file_type)}</td>
@@ -1249,43 +1813,50 @@ async function loadDatabase() {
                 <td>${item.images || 0}</td>
                 <td><button class="btn btn-sm btn-outline-danger" onclick="deleteSubmission('${item.id}')"><i class="fas fa-trash"></i></button></td>
             </tr>`;
+                });
+                html += `</tbody></table></div>`;
+                html +=
+                    `<div class="text-muted mt-2" style="font-size:13px;">${items.length} soumission(s) affichee(s)</div>`;
+                panel.innerHTML = html;
+            } catch (e) {
+                panel.innerHTML =
+                    '<div class="text-center text-danger py-3"><i class="fas fa-plug me-1"></i>Erreur de connexion a l\'API</div>';
+            }
+        }
+
+        async function deleteSubmission(id) {
+            if (!confirm('Supprimer cette soumission ?')) return;
+            try {
+                await fetch(`${getApiUrl()}/api/delete/${id}`, {
+                    method: 'DELETE'
+                });
+                showToast('Soumission supprimee', 'success');
+                loadDatabase();
+            } catch (e) {
+                showToast('Erreur', 'error');
+            }
+        }
+
+        // ===========================================================================
+        // SETTINGS
+        // ===========================================================================
+        function applySettings() {
+            const url = document.getElementById('settingsApiUrl').value.replace(/\/$/, '');
+            localStorage.setItem('plagiat_api_url', url);
+            document.getElementById('apiUrlInput').value = url;
+            API_URL = url;
+            showToast('Configuration sauvegardee', 'success');
+            checkHealth();
+        }
+
+        // ===========================================================================
+        // INIT
+        // ===========================================================================
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            setTimeout(checkHealth, 500);
         });
-        html += `</tbody></table></div>`;
-        html += `<div class="text-muted mt-2" style="font-size:13px;">${items.length} soumission(s) affichee(s)</div>`;
-        panel.innerHTML = html;
-    } catch (e) {
-        panel.innerHTML = '<div class="text-center text-danger py-3"><i class="fas fa-plug me-1"></i>Erreur de connexion a l\'API</div>';
-    }
-}
-
-async function deleteSubmission(id) {
-    if (!confirm('Supprimer cette soumission ?')) return;
-    try {
-        await fetch(`${getApiUrl()}/api/delete/${id}`, { method: 'DELETE' });
-        showToast('Soumission supprimee', 'success');
-        loadDatabase();
-    } catch (e) { showToast('Erreur', 'error'); }
-}
-
-// ===========================================================================
-// SETTINGS
-// ===========================================================================
-function applySettings() {
-    const url = document.getElementById('settingsApiUrl').value.replace(/\/$/, '');
-    localStorage.setItem('plagiat_api_url', url);
-    document.getElementById('apiUrlInput').value = url;
-    API_URL = url;
-    showToast('Configuration sauvegardee', 'success');
-    checkHealth();
-}
-
-// ===========================================================================
-// INIT
-// ===========================================================================
-window.addEventListener('DOMContentLoaded', () => {
-    loadStats();
-    setTimeout(checkHealth, 500);
-});
-</script>
+    </script>
 </body>
+
 </html>

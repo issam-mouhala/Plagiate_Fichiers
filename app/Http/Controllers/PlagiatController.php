@@ -32,7 +32,7 @@ class PlagiatController extends Controller
 
         // 2. Vérifier que l'API est disponible
         try {
-            $health = Http::timeout(5)->get('http://localhost:5000/api/health');
+            $health = Http::timeout(5)->get(env('API_KEY_PY').'/api/health');
         } catch (\Exception $e) {
             return back()->with('error', 'API non disponible. Vérifiez que le serveur Python tourne sur le port 5000.');
         }
@@ -43,7 +43,7 @@ class PlagiatController extends Controller
                 'file',
                 $file->get(),
                 $file->getClientOriginalName()
-            )->post('http://localhost:5000/api/check', [
+            )->post(env('API_KEY_PY').'/api/check', [
                 'file_type' => "auto",
             ]);
         } catch (\Exception $e) {
@@ -104,7 +104,7 @@ class PlagiatController extends Controller
             'file',                       // nom du champ attendu par Python
             file_get_contents($r->file->path()),
             $r->file->getClientOriginalName()              // nom original
-        )->post('http://localhost:5000/api/add', [
+        )->post(env('API_KEY_PY').'/api/add', [
             'file_type' => 'auto',       // ou 'text'
             'metadata'  => json_encode([ // optionnel
                 'auteur' => 'Prof Martin',
