@@ -214,7 +214,4 @@ class PlagiatController extends Controller
     {
         return view("accueil.register");
     }
-    function base(){
-        return Submission::all();
-    }
 }

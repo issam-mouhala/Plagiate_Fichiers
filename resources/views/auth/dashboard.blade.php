@@ -1137,7 +1137,7 @@
         // ===========================================================================
         // CONFIG
         // ===========================================================================
-        let API_URL = localStorage.getItem('plagiat_api_url') || 'https://issahn-plagiarism-api.hf.space';
+        let API_URL = localStorage.getItem('plagiat_api_url') || "{{env('API_KEY_PY')}}";
         let selectedFile = null;
         let selectedZip = null;
         let corpusChart = null;

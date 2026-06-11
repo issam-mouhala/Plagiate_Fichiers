@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 Route::get('/',PlagiatController::class."@index")->name("accueil.index");
 Route::get('/base',PlagiatController::class."@base");
+Route::get('/api/submission/{id}/status', [PlagiatController::class, 'checkStatus'])->name('submission.status');
+Route::get('/history/{id}', [PlagiatController::class, 'showSubmission'])->name('submission.show');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 Route::middleware('guest')->group(function () {
@@ -27,7 +29,7 @@ Route::post('/zip', function (Request $request) {
     set_time_limit(0);
 
 
-    $response = Http::timeout(1200)->attach(
+    $response = Http::timeout(12000)->attach(
        'file',
        fopen("C:\Users\Any\OneDrive\Desktop\laravel\learn\public\\fils\\". $request->file('submission')->getClientOriginalName(), 'r'),
        $request->file('submission')->getClientOriginalName()
