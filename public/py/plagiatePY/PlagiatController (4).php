@@ -25,7 +25,7 @@ class PlagiatController extends Controller
     // ═══════════════════════════════════════════════════════
     //  ANALYSE FICHIER UNIQUE (ASYNC avec Queue)
     // ═══════════════════════════════════════════════════════
-    public function analyseTest(Request $r)
+    public function analyse(Request $r)
     {
         $r->validate([
             'submission' => 'required|file|max:20240',
@@ -83,81 +83,88 @@ class PlagiatController extends Controller
     //      image_analysis, image_matches, overall_score,
     //      plagiarism_detected, content_analysis, text_matches, raw_response
     // ═══════════════════════════════════════════════════════
-    public function analyse(Request $r)
+    public function analyseResult($id)
     {
-        // 1. Valider
-        $r->validate([
-            'submission' => 'required|file|max:20240',
-            'file_type'  => 'nullable|string|in:text,code,auto',
-        ]);
+        $submission = Submission::with(['zipFiles', 'analyses'])->findOrFail($id);
 
-        $file = $r->file('submission');
-        $fileType = $r->input('file_type', 'auto');
-
-        // 2. Vérifier que l'API est disponible
-        try {
-            $health = Http::timeout(5)->get(env('API_KEY_PY').'/api/health');
-        } catch (\Exception $e) {
-            return back()->with('error', 'API non disponible. Vérifiez que le serveur Python tourne sur le port 5000.');
-        }
-
-        // 3. Envoyer le fichier à l'API
-        try {
-            $response = Http::timeout(300)->attach(
-                'file',
-                $file->get(),
-                $file->getClientOriginalName()
-            )->post(env('API_KEY_PY').'/api/check', [
-                'file_type' => "auto",
+        // ─── Si en cours → page d'attente avec auto-refresh ───
+        if ($submission->overall_level === 'processing') {
+            return view('analyse.index', [
+                'submission'        => $submission,
+                'filename'          => $submission->filename,
+                'file_type'         => $submission->detected_type ?? 'text',
+                'content_length'    => 0,
+                'num_comparisons'   => 0,
+                'engines_used'      => [],
+                'extraction'        => [],
+                'images_extracted'  => 0,
+                'image_analysis'    => null,
+                'image_matches'     => [],
+                'overall_score'     => 0,
+                'plagiarism_detected' => false,
+                'content_analysis'  => null,
+                'text_matches'      => [],
+                'raw_response'       => null,
             ]);
-        } catch (\Exception $e) {
-            return back()->with('error', 'Timeout. Le fichier est peut-être trop volumineux ou l\'API répond lentement.');
         }
 
-        // 4. Erreur API
-        if ($response->failed()) {
-            return back()->with('error', 'Erreur API : ' . $response->body());
+        // ─── Si erreur ───
+        if ($submission->overall_level === 'error') {
+            return view('analyse.index', [
+                'submission'        => $submission,
+                'filename'          => $submission->filename,
+                'file_type'         => $submission->detected_type ?? 'text',
+                'content_length'    => 0,
+                'num_comparisons'   => 0,
+                'engines_used'      => [],
+                'extraction'        => [],
+                'images_extracted'  => 0,
+                'image_analysis'    => null,
+                'image_matches'     => [],
+                'overall_score'     => 0,
+                'plagiarism_detected' => false,
+                'content_analysis'  => null,
+                'text_matches'      => [],
+                'raw_response'       => null,
+            ]);
         }
 
-        $data = $response->json();
-        $d = $data['data'] ?? [];
+        // ─── Résultats prêts → décoder raw_response ───
+        $raw = $submission->raw_response;
 
-        // 5. Extraire les moteurs utilisés depuis les matches
-        $enginesUsed = [];
-        foreach (($d['content_analysis']['text_matches'] ?? []) as $match) {
-            foreach (($match['engines'] ?? []) as $name => $info) {
-                $enginesUsed[$name] = true;
-            }
+        if (is_string($raw)) {
+            $raw = json_decode($raw, true);
         }
 
-        // 6. Envoyer à la vue
-        return view("analyse.index", [
-            // Fichier
-            'filename'         => $d['filename'] ?? $file->getClientOriginalName(),
-            'file_type'        => $d['detected_type'] ?? 'text',
-            'detected_format'  => $d['detected_type'] ?? null,
-            'extraction'       => $d['extraction'] ?? [],
-            'content_length'   => $d['content_length'] ?? 0,
-            'images_extracted' => $d['images_extracted'] ?? 0,
-            'num_comparisons'  => $d['num_comparisons'] ?? 0,
+        if (!is_array($raw)) {
+            $raw = [];
+        }
 
-            // Score global
-            'plagiarism_detected' => $d['plagiarism_detected'] ?? false,
-            'overall_score'  => $d['overall_score'] ?? 0,
-            'overall_level'  => $d['overall_level'] ?? 'none',
+        // ─── Préparer les 14 variables pour la vue ───
 
-            // Analyse texte
-            'content_analysis' => $d['content_analysis'] ?? [],
-            'text_matches'     => $d['content_analysis']['text_matches'] ?? [],
-            'engines_used'     => $enginesUsed,
+        $filename       = $submission->filename;
+        $file_type      = $raw['file_type'] ?? $submission->detected_type ?? 'text';
+        $content_length = $raw['content_length'] ?? (isset($raw['content']) ? strlen($raw['content']) : 0);
+        $num_comparisons = $raw['num_comparisons'] ?? ($raw['comparisons_performed'] ?? 0);
+        $engines_used   = $raw['engines_used'] ?? ($submission->engines_used ?? []);
+        $extraction     = $raw['extraction'] ?? [];
+        $images_extracted = $raw['images_extracted'] ?? (isset($raw['extraction']['images_extracted']) ? $raw['extraction']['images_extracted'] : 0);
+        $image_analysis = $raw['image_analysis'] ?? null;
+        $image_matches  = $raw['image_matches'] ?? (isset($raw['image_analysis']['matches']) ? $raw['image_analysis']['matches'] : []);
+        $overall_score  = (float) ($submission->overall_score ?? ($raw['overall_score'] ?? 0));
+        $plagiarism_detected = (bool) ($submission->plagiarism_detected ?? ($raw['plagiarism_detected'] ?? false));
+        $content_analysis = $raw['content_analysis'] ?? null;
+        $text_matches   = $raw['text_matches'] ?? (isset($raw['content_analysis']['matches']) ? $raw['content_analysis']['matches'] : []);
+        $raw_response   = $raw;
 
-            // Analyse images
-            'image_analysis' => $d['image_analysis'] ?? [],
-            'image_matches'  => $d['image_analysis']['image_matches'] ?? [],
-
-            // Tout le JSON brut pour export
-            'raw_response' => $data,
-        ]);
+        return view('analyse.index', compact(
+            'submission',
+            'filename', 'file_type', 'content_length',
+            'num_comparisons', 'engines_used', 'extraction',
+            'images_extracted', 'image_analysis', 'image_matches',
+            'overall_score', 'plagiarism_detected',
+            'content_analysis', 'text_matches', 'raw_response'
+        ));
     }
 
     // ═══════════════════════════════════════════════════════

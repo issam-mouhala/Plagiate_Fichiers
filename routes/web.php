@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 Route::get('/',PlagiatController::class."@index")->name("accueil.index");
 Route::get('/base',PlagiatController::class."@base");
+Route::get('/user',PlagiatController::class."@userDashboard");
 Route::get('/api/submission/{id}/status', [PlagiatController::class, 'checkStatus'])->name('submission.status');
 Route::get('/history/{id}', [PlagiatController::class, 'showSubmission'])->name('submission.show');
 
@@ -18,11 +19,12 @@ Route::get('/register',AuthController::class."@showRegisterForm")->name("registe
 Route::post('/register',AuthController::class."@register")->name("auth.register");
 
 });
+Route::get('/analyse',PlagiatController::class."@analyse")->name("analyse.index");
+Route::post('/analyse',PlagiatController::class."@analyse")->name("analyse.index");
 
 Route::middleware('auth')->group(function () {
 Route::get('/accueil',PlagiatController::class."@index")->name("accueil.index");
 Route::get('/upload',PlagiatController::class."@upload")->name("upload.index");
-Route::post('/analyse',PlagiatController::class."@analyse")->name("analyse.index");
 Route::get('/reference/ajouter',PlagiatController::class."@create")->name("create.index");
 Route::post('/reference/ajouter',PlagiatController::class."@store")->name("store.index");
 Route::post('/zip', function (Request $request) {
