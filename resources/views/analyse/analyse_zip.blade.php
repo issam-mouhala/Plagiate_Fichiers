@@ -1,925 +1,796 @@
-{{-- resources/views/analyse_zip/index.blade.php --}}
-{{-- Rapport d'analyse ZIP — PlagioScan --}}
+{{-- resources/views/analyse_zip/index_v2.blade.php --}}
+{{-- PlagioScan ZIP Rapport v2 — design néo‑glass/indigo --}}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlagioScan – Rapport d'analyse ZIP</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>PlagioScan – Analyse ZIP avancée</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #0f172a;
-            --primary-light: #1e293b;
-            --accent: #3b82f6;
-            --accent-light: #93c5fd;
-            --success: #10b981;
-            --success-bg: #ecfdf5;
-            --warning: #f59e0b;
-            --warning-bg: #fffbeb;
-            --danger: #ef4444;
-            --danger-bg: #fef2f2;
-            --info: #06b6d4;
-            --surface: #ffffff;
-            --surface-hover: #f8fafc;
-            --border: #e2e8f0;
-            --muted: #64748b;
-            --text: #0f172a;
-            --text-secondary: #475569;
-            --radius-xl: 1.25rem;
-            --radius-2xl: 1.5rem;
-            --radius-3xl: 2rem;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 16px -2px rgba(0,0,0,0.08);
-            --shadow-lg: 0 12px 40px -8px rgba(0,0,0,0.12);
-            --shadow-xl: 0 24px 60px -12px rgba(0,0,0,0.18);
+        /* ================================================================
+           DESIGN SYSTEM – Indigo Glass v2.0
+           ================================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        *, *::before, *::after { box-sizing: border-box; }
+
         body {
-            background: #f1f5f9;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--text);
-            margin: 0; padding: 0; min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: linear-gradient(145deg, #f6f9fc 0%, #eef2f8 100%);
+            transition: background 0.3s ease, color 0.2s ease;
+            min-height: 100vh;
         }
-        .bg-mesh {
-            position: fixed; inset: 0; z-index: -1; overflow: hidden;
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #0f172a 100%);
+
+        body.dark {
+            background: linear-gradient(145deg, #0b1120 0%, #0a0f1c 100%);
+            color: #e2e8f0;
         }
-        .bg-mesh::before, .bg-mesh::after {
-            content: ''; position: absolute; border-radius: 50%;
-            filter: blur(100px); opacity: 0.15;
-            animation: float 20s ease-in-out infinite;
+
+        /* Theme toggle */
+        .theme-switch {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 1100;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 3rem;
+            padding: 0.6rem 1rem;
+            display: flex;
+            gap: 0.6rem;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
         }
-        .bg-mesh::before { width: 600px; height: 600px; background: var(--accent); top: -200px; right: -100px; }
-        .bg-mesh::after { width: 500px; height: 500px; background: #8b5cf6; bottom: -150px; left: -100px; animation-delay: -10s; }
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.05); }
-            66% { transform: translate(-20px, 20px) scale(0.95); }
+        .theme-switch:hover {
+            transform: scale(1.05);
         }
-        .main-container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+        .theme-switch i {
+            font-size: 1.2rem;
+            color: #fbbf24;
+        }
+        body.dark .theme-switch i:first-child { color: #94a3b8; }
+        body.dark .theme-switch i:last-child { color: #fbbf24; }
+
+        /* Main container */
+        .report-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        /* Glassmorphic card base */
         .glass-card {
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(24px) saturate(1.4);
-            -webkit-backdrop-filter: blur(24px) saturate(1.4);
-            border: 1px solid rgba(255,255,255,0.5);
-            border-radius: var(--radius-3xl);
-            box-shadow: var(--shadow-xl);
-            padding: 2.5rem 3rem;
-            animation: cardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px) saturate(1.5);
+            border-radius: 2.5rem;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+            transition: background 0.3s, border 0.3s, box-shadow 0.3s;
         }
-        @keyframes cardIn { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        body.dark .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            border-color: rgba(99, 102, 241, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
 
-        /* HEADER */
+        /* Header */
         .report-header {
-            display: flex; justify-content: space-between; align-items: flex-start;
-            flex-wrap: wrap; gap: 1rem; padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border); margin-bottom: 2rem;
+            padding: 2rem 2.5rem 1rem 2.5rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
-        .brand { display: flex; align-items: center; gap: 0.75rem; }
-        .brand-icon {
-            width: 48px; height: 48px;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            border-radius: 14px; display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1.4rem; box-shadow: 0 4px 16px rgba(59,130,246,0.35);
+        body.dark .report-header {
+            border-bottom-color: rgba(255,255,255,0.05);
         }
-        .brand-name {
-            font-size: 1.5rem; font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
-        .report-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; color: var(--muted); font-size: 0.8rem; }
+        .logo-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.6rem;
+            box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.4);
+        }
+        .logo-text h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(135deg, #1e293b, #4f46e5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        body.dark .logo-text h1 {
+            background: linear-gradient(135deg, #cbd5e1, #a5b4fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        .logo-text p {
+            font-size: 0.7rem;
+            margin: 0;
+            color: #64748b;
+        }
+        body.dark .logo-text p {
+            color: #94a3b8;
+        }
+        .badge-group {
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+        }
         .report-badge {
-            display: inline-flex; align-items: center; gap: 0.4rem;
-            padding: 0.3rem 0.9rem; border-radius: 2rem;
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            background: rgba(0,0,0,0.04);
+            backdrop-filter: blur(4px);
         }
-        .report-badge.zip-badge { background: linear-gradient(135deg, #fff7ed, #ffedd5); color: #ea580c; }
-        .report-badge.analysis-badge { background: linear-gradient(135deg, #eff6ff, #e0e7ff); color: var(--accent); }
-
-        /* SECTION TITLE */
-        .section-title {
-            font-size: 1rem; font-weight: 700; color: var(--text);
-            margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;
+        body.dark .report-badge {
+            background: rgba(255,255,255,0.05);
         }
-        .section-title i { color: var(--accent); font-size: 1.1rem; }
-        .section-divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
-
-        /* STAT CARDS */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-        .stat-card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius-xl); padding: 1.25rem 1.5rem;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden;
+        .report-badge i {
+            margin-right: 0.3rem;
         }
-        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), #8b5cf6); opacity: 0; transition: opacity 0.3s; }
-        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent-light); }
-        .stat-card:hover::before { opacity: 1; }
-        .stat-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 0.75rem; }
-        .stat-icon.blue { background: #eff6ff; color: var(--accent); }
-        .stat-icon.green { background: #ecfdf5; color: var(--success); }
-        .stat-icon.purple { background: #f5f3ff; color: #8b5cf6; }
-        .stat-icon.orange { background: #fff7ed; color: #f97316; }
-        .stat-icon.red { background: #fef2f2; color: var(--danger); }
-        .stat-icon.cyan { background: #ecfeff; color: var(--info); }
-        .stat-value { font-size: 1.3rem; font-weight: 800; color: var(--text); line-height: 1.2; word-break: break-all; }
-        .stat-label { font-size: 0.78rem; color: var(--muted); font-weight: 500; margin-top: 0.15rem; }
-        .stat-detail { font-size: 0.72rem; color: var(--text-secondary); margin-top: 0.5rem; line-height: 1.5; }
 
-        .extraction-tag {
-            display: inline-flex; align-items: center; gap: 0.3rem;
-            padding: 0.2rem 0.6rem; border-radius: 1rem;
-            font-size: 0.68rem; font-weight: 600;
-            background: #f1f5f9; color: var(--text-secondary); border: 1px solid var(--border);
+        /* Stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1.2rem;
+            padding: 2rem 2.5rem;
         }
-        .extraction-tag.pdf { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
-        .extraction-tag.docx { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
-        .extraction-tag.img { background: #f5f3ff; color: #7c3aed; border-color: #ddd6fe; }
-        .extraction-tag.zip { background: #fff7ed; color: #ea580c; border-color: #fed7aa; }
-        .extraction-tag.code { background: #ecfdf5; color: #059669; border-color: #a7f3d0; }
+        .stat-tile {
+            background: white;
+            border-radius: 1.6rem;
+            padding: 1.2rem 1rem;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        body.dark .stat-tile {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(255,255,255,0.05);
+        }
+        .stat-tile:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+        }
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-top: 0.3rem;
+        }
+        body.dark .stat-label {
+            color: #94a3b8;
+        }
 
-        /* LEVEL BADGE */
+        /* Score ring section */
+        .score-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+            padding: 0 2.5rem 2rem 2.5rem;
+        }
+        .score-ring-box {
+            flex: 0 0 240px;
+            text-align: center;
+        }
+        .score-ring-svg {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+        .score-ring-svg svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        .ring-bg {
+            stroke: rgba(0,0,0,0.08);
+            stroke-width: 12;
+            fill: none;
+        }
+        body.dark .ring-bg {
+            stroke: rgba(255,255,255,0.1);
+        }
+        .ring-progress {
+            stroke-width: 12;
+            stroke-linecap: round;
+            fill: none;
+            transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .score-center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        .score-percent {
+            font-size: 2.6rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+        .plagiarism-alert {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ef4444;
+            color: white;
+            border-radius: 2rem;
+            padding: 0.4rem 1.2rem;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-top: 0.8rem;
+            box-shadow: 0 4px 12px rgba(239,68,68,0.3);
+        }
+        .plagiarism-alert.success {
+            background: #10b981;
+        }
+        .score-summary {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
         .level-badge {
-            display: inline-flex; align-items: center; gap: 0.3rem;
-            padding: 0.25rem 0.7rem; border-radius: 1rem;
-            font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
         }
-        .level-badge.critical { background: var(--danger); color: white; }
-        .level-badge.high { background: #f97316; color: white; }
-        .level-badge.medium { background: var(--warning); color: #1e293b; }
-        .level-badge.low { background: var(--accent); color: white; }
-        .level-badge.none { background: #94a3b8; color: white; }
+        .level-critical { background: #ef4444; color: white; }
+        .level-high { background: #f97316; color: white; }
+        .level-medium { background: #f59e0b; color: #1e293b; }
+        .level-low { background: #3b82f6; color: white; }
+        .level-none { background: #94a3b8; color: white; }
 
-        /* SCORE RING */
-        .score-section {
-            display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: center;
-            padding: 2rem; background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border-radius: var(--radius-2xl); border: 1px solid var(--border); margin-bottom: 2rem;
+        /* Tabs */
+        .tabs-container {
+            padding: 0 2rem;
         }
-        .score-ring { position: relative; width: 180px; height: 180px; margin: 0 auto 1rem; }
-        .score-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-        .score-ring .track { fill: none; stroke: var(--border); stroke-width: 10; }
-        .score-ring .progress-arc { fill: none; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 502.65; stroke-dashoffset: 502.65; transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
-        .score-ring .score-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .score-number { font-size: 2.75rem; font-weight: 800; line-height: 1; }
-        .score-unit { font-size: 0.85rem; font-weight: 600; color: var(--muted); margin-top: 0.1rem; }
-        .score-label { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.75rem; text-align: center; }
+        .tabs-nav {
+            display: flex;
+            gap: 0.2rem;
+            background: rgba(0,0,0,0.03);
+            border-radius: 2rem;
+            padding: 0.3rem;
+        }
+        body.dark .tabs-nav {
+            background: rgba(255,255,255,0.03);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            border: none;
+            background: transparent;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: #475569;
+        }
+        body.dark .tab-btn {
+            color: #cbd5e1;
+        }
+        .tab-btn.active {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            color: #4f46e5;
+        }
+        body.dark .tab-btn.active {
+            background: #1e293b;
+            color: #a5b4fc;
+        }
+        .tab-content {
+            display: none;
+            padding: 2rem 0;
+            animation: fadeSlide 0.3s ease-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        .alert-plagiat {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.6rem 1.2rem; border-radius: var(--radius-xl);
-            font-weight: 700; font-size: 0.85rem; margin-top: 0.75rem;
-            animation: pulse 2s ease-in-out infinite;
+        /* Match cards */
+        .match-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            border-left: 4px solid;
+            transition: all 0.25s;
         }
-        .alert-plagiat.danger { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; box-shadow: 0 4px 20px rgba(220,38,38,0.4); }
-        .alert-plagiat.success { background: linear-gradient(135deg, #10b981, #059669); color: white; box-shadow: 0 4px 20px rgba(16,185,129,0.3); }
-        @keyframes pulse { 0%, 100% { box-shadow: 0 4px 20px rgba(0,0,0,0.2); } 50% { box-shadow: 0 4px 30px rgba(0,0,0,0.35); } }
+        body.dark .match-card {
+            background: #1e293b;
+        }
+        .match-card:hover {
+            transform: translateX(6px);
+            box-shadow: 0 12px 20px -12px rgba(0,0,0,0.15);
+        }
 
-        /* FILE TABLE */
-        .file-table-wrap {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius-xl); overflow: hidden; margin-bottom: 2rem;
+        /* File table */
+        .file-table-wrapper {
+            overflow-x: auto;
+            margin: 0 2rem 2rem 2rem;
+            border-radius: 1.2rem;
+            background: white;
+            border: 1px solid #e2e8f0;
         }
-        .file-table { width: 100%; font-size: 0.82rem; border-collapse: collapse; }
-        .file-table thead { background: linear-gradient(135deg, #f8fafc, #f1f5f9); }
+        body.dark .file-table-wrapper {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        .file-table {
+            width: 100%;
+            font-size: 0.8rem;
+            border-collapse: collapse;
+        }
         .file-table th {
-            font-weight: 700; color: var(--muted); text-transform: uppercase;
-            font-size: 0.68rem; letter-spacing: 0.05em; padding: 0.85rem 1.25rem;
-            border-bottom: 2px solid var(--border); text-align: left;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            color: #475569;
+            border-bottom: 1px solid #e2e8f0;
         }
-        .file-table td { padding: 0.75rem 1.25rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
-        .file-table tbody tr { transition: background 0.2s; }
-        .file-table tbody tr:hover { background: var(--surface-hover); }
-        .file-table tbody tr:last-child td { border-bottom: none; }
-        .file-icon-mini { width: 32px; height: 32px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; }
-        .file-icon-mini.text { background: #eff6ff; color: var(--accent); }
-        .file-icon-mini.code { background: #ecfdf5; color: #059669; }
-        .file-icon-mini.image { background: #f5f3ff; color: #7c3aed; }
-        .file-icon-mini.pdf { background: #fef2f2; color: #dc2626; }
-        .file-icon-mini.docx { background: #dbeafe; color: #2563eb; }
-        .ext-badge {
-            display: inline-block; padding: 0.1rem 0.45rem; border-radius: 0.5rem;
-            font-size: 0.65rem; font-weight: 700; background: #f1f5f9; color: var(--text-secondary);
-            border: 1px solid var(--border);
+        body.dark .file-table th {
+            color: #94a3b8;
+            border-bottom-color: #334155;
+        }
+        .file-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        body.dark .file-table td {
+            border-bottom-color: #334155;
         }
 
-        /* CROSS MATCH CARDS */
-        .cross-card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius-xl); overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-            position: relative; margin-bottom: 1rem;
+        /* Buttons */
+        .btn-glass {
+            background: rgba(255,255,255,0.9);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 2rem;
+            padding: 0.5rem 1.2rem;
+            font-weight: 600;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        .cross-card:hover { border-color: var(--accent-light); box-shadow: var(--shadow-lg); transform: translateX(4px); }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-        .cross-accent { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
-        .cross-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; padding: 1.25rem 1.5rem 0.5rem; }
-        .cross-pair { display: flex; align-items: center; gap: 0.6rem; font-size: 0.9rem; }
-        .cross-pair strong { font-size: 0.88rem; }
-        .cross-pair .arrow-icon { color: var(--muted); font-size: 0.8rem; }
-        .cross-score-big { font-size: 1.6rem; font-weight: 800; }
-        .cross-progress { padding: 0.5rem 1.5rem; }
-        .progress-track { height: 6px; background: var(--border); border-radius: 1rem; overflow: hidden; }
-        .progress-fill { height: 100%; border-radius: 1rem; transition: width 1s cubic-bezier(0.16, 1, 0.3, 1); }
-
-        /* PER-FILE RESULTS */
-        .per-file-card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius-xl); overflow: hidden; margin-bottom: 1rem;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+        body.dark .btn-glass {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-color: #334155;
         }
-        .per-file-card:hover { box-shadow: var(--shadow-md); }
-        .per-file-header {
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 0.75rem; padding: 1.25rem 1.5rem;
-            cursor: pointer; transition: background 0.2s;
-        }
-        .per-file-header:hover { background: var(--surface-hover); }
-        .per-file-name { display: flex; align-items: center; gap: 0.6rem; }
-        .per-file-name strong { font-size: 0.92rem; }
-        .per-file-score { display: flex; align-items: center; gap: 0.75rem; }
-        .per-file-matches-wrap { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-        .per-file-matches-wrap.open { max-height: 5000px; }
-        .per-file-matches-inner { padding: 0 1.5rem 1.25rem; border-top: 1px solid var(--border); }
-        .per-file-match-row {
-            display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0;
-            border-bottom: 1px solid #f1f5f9; font-size: 0.8rem;
-        }
-        .per-file-match-row:last-child { border-bottom: none; }
-
-        /* ENGINE DETAILS */
-        .engine-details { padding: 0 1.5rem 1rem; }
-        .engine-toggle {
-            display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem;
-            font-weight: 600; color: var(--muted); cursor: pointer;
-            padding: 0.5rem 0; border: none; background: none; transition: color 0.2s;
-        }
-        .engine-toggle:hover { color: var(--accent); }
-        .engine-toggle i { transition: transform 0.3s; }
-        .engine-toggle.active i { transform: rotate(180deg); }
-        .engine-table-wrap { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .engine-table-wrap.open { max-height: 500px; }
-        .engine-table { width: 100%; font-size: 0.78rem; border-collapse: collapse; }
-        .engine-table th { font-weight: 600; color: var(--muted); text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.04em; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left; }
-        .engine-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
-        .engine-table tr:last-child td { border-bottom: none; }
-        .engine-table tr:hover td { background: var(--surface-hover); }
-        .mini-progress { width: 80px; height: 4px; background: var(--border); border-radius: 1rem; overflow: hidden; display: inline-block; vertical-align: middle; }
-        .mini-progress .fill { height: 100%; border-radius: 1rem; background: var(--accent); transition: width 0.8s ease; }
-        .engine-pill {
-            display: inline-block; padding: 0.12rem 0.5rem; border-radius: 0.75rem;
-            font-size: 0.65rem; font-weight: 700; background: #f1f5f9; color: var(--text); border: 1px solid var(--border);
+        .btn-glass:hover {
+            transform: translateY(-2px);
+            background: white;
+            box-shadow: 0 8px 16px -8px rgba(0,0,0,0.1);
         }
 
-        /* IMAGE ANALYSIS */
-        .image-analysis-section {
-            background: linear-gradient(135deg, #faf5ff, #f1f5f9);
-            border: 1px solid #e9d5ff; border-radius: var(--radius-2xl); padding: 1.5rem; margin-bottom: 2rem;
+        .action-bar {
+            padding: 1.5rem 2.5rem 2rem;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
-        .image-analysis-section h5 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-        .image-analysis-section h5 i { color: #8b5cf6; }
-        .img-match-card {
-            background: white; border: 1px solid #e9d5ff; border-radius: var(--radius-xl);
-            padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
-        }
-        .img-match-card:last-child { margin-bottom: 0; }
-        .img-icon { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #8b5cf6, #a78bfa); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; flex-shrink: 0; }
-        .img-info { flex: 1; min-width: 200px; }
-        .img-info strong { font-size: 0.85rem; }
-        .img-info small { color: var(--muted); font-size: 0.72rem; }
-        .img-score-badge { padding: 0.35rem 0.9rem; border-radius: 2rem; font-weight: 800; font-size: 0.8rem; color: white; }
 
-        /* NO MATCHES */
-        .no-matches { text-align: center; padding: 2.5rem 2rem; background: var(--success-bg); border: 1px solid #a7f3d0; border-radius: var(--radius-2xl); }
-        .no-matches .icon-circle { width: 64px; height: 64px; border-radius: 50%; background: var(--success); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.75rem; }
-        .no-matches h4 { font-weight: 700; color: #065f46; margin-bottom: 0.3rem; font-size: 0.95rem; }
-        .no-matches p { color: var(--muted); font-size: 0.82rem; margin: 0; }
-
-        /* TABS */
-        .analysis-tabs {
-            display: flex; gap: 0; background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius-xl); overflow: hidden; margin-bottom: 2rem;
-        }
-        .analysis-tab {
-            flex: 1; padding: 0.85rem 1rem; font-size: 0.82rem; font-weight: 600;
-            text-align: center; cursor: pointer; border: none; background: none;
-            color: var(--muted); transition: all 0.25s; border-right: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
-        }
-        .analysis-tab:last-child { border-right: none; }
-        .analysis-tab:hover { background: var(--surface-hover); color: var(--text); }
-        .analysis-tab.active { background: linear-gradient(135deg, var(--accent), #6366f1); color: white; }
-        .analysis-tab .tab-count {
-            display: inline-flex; align-items: center; justify-content: center;
-            min-width: 20px; height: 20px; border-radius: 1rem; font-size: 0.65rem; font-weight: 700;
-            background: rgba(255,255,255,0.25); padding: 0 0.3rem;
-        }
-        .analysis-tab:not(.active) .tab-count { background: #f1f5f9; color: var(--text-secondary); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        /* ACTIONS */
-        .actions-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
-        .btn-primary-custom {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.7rem 1.5rem; border-radius: 2rem; font-weight: 600; font-size: 0.85rem;
-            border: none; background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 16px rgba(15,23,42,0.25);
-        }
-        .btn-primary-custom:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,23,42,0.35); color: white; }
-        .btn-outline-custom {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.6rem 1.3rem; border-radius: 2rem; font-weight: 600; font-size: 0.82rem;
-            border: 1px solid var(--border); background: white; color: var(--text-secondary);
-            text-decoration: none; transition: all 0.3s;
-        }
-        .btn-outline-custom:hover { background: var(--surface-hover); border-color: var(--accent); color: var(--accent); }
-
-        /* RAW JSON */
-        .raw-json-section { margin-top: 2rem; }
-        .raw-json-toggle { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; padding: 0.5rem 0; }
-        .raw-json-toggle:hover { color: var(--accent); }
-        .raw-json-wrap { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
-        .raw-json-wrap.open { max-height: 3000px; }
-        .raw-json-pre {
-            background: #0f172a; color: #a5f3fc; padding: 1.5rem; border-radius: var(--radius-xl);
-            font-size: 0.72rem; font-family: 'Fira Code', 'Courier New', monospace; overflow-x: auto; max-height: 500px; overflow-y: auto;
-            line-height: 1.6; margin-top: 0.5rem; white-space: pre-wrap; word-break: break-all;
+        /* footer */
+        .report-footer {
+            text-align: center;
+            padding: 1rem 0 1.5rem;
+            font-size: 0.7rem;
+            color: #64748b;
         }
 
         @media (max-width: 768px) {
-            .score-section { grid-template-columns: 1fr; text-align: center; }
-            .glass-card { padding: 1.5rem; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .analysis-tabs { flex-wrap: wrap; }
-            .analysis-tab { flex: 1 1 33%; border-bottom: 1px solid var(--border); }
+            .stats-grid { padding: 1.5rem; }
+            .score-panel { flex-direction: column; text-align: center; }
+            .tabs-nav { flex-wrap: wrap; }
+            .tab-btn { padding: 0.5rem; }
         }
         @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr; }
-        }
-        @media print {
-            body { background: white !important; }
-            .bg-mesh { display: none; }
-            .glass-card { box-shadow: none; backdrop-filter: none; animation: none; border: 1px solid #ddd; }
-            .btn-primary-custom, .btn-outline-custom, .engine-toggle, .raw-json-toggle, .analysis-tab { display: none; }
-            .tab-content { display: block !important; }
-            .per-file-matches-wrap { max-height: none !important; }
-            .raw-json-section { display: none; }
-        }
-        a{
-            text-decoration: none
+            .report-header { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-mesh"></div>
-    <div class="main-container">
+    <div class="theme-switch" id="themeToggle">
+        <i class="bi bi-sun-fill"></i>
+        <i class="bi bi-moon-fill"></i>
+    </div>
+
+    <div class="report-container">
         <div class="glass-card">
-
-            {{-- ===== HEADER ===== --}}
+            <!-- Header -->
             <div class="report-header">
-                <div class="brand">
-                    <div class="brand-icon"><i class="bi bi-shield-shaded"></i></div>
-                    <a  href="{{route("accueil.index")}} ">
-                        <div class="brand-name">PlagioScan</div>
-                        <div style="font-size: 0.72rem; color: var(--muted); font-weight: 500;">Moteur de d&eacute;tection anti-plagiat</div>
-                    </a>
-                </div>
-                <div>
-                    <span class="report-badge zip-badge"><i class="bi bi-file-earmark-zip"></i> Analyse ZIP</span>
-                    <span class="report-badge analysis-badge" style="margin-left:0.4rem;"><i class="bi bi-bar-chart-line"></i> Rapport</span>
-                    <div class="report-meta" style="margin-top: 0.5rem;">
-                        <span><i class="bi bi-clock me-1"></i>{{ now()->format('d/m/Y ; H:i') }}</span>
+                <div class="logo-area">
+                    <div class="logo-icon"><i class="bi bi-shield-shaded"></i></div>
+                    <div class="logo-text">
+                        <h1>PlagioScan ZIP</h1>
+                        <p>analyse avancée de similarités</p>
                     </div>
+                </div>
+                <div class="badge-group">
+                    <span class="report-badge"><i class="bi bi-file-zip"></i> Archive ZIP</span>
+                    <span class="report-badge"><i class="bi bi-calendar3"></i> {{ now()->format('d/m/Y H:i') }}</span>
                 </div>
             </div>
 
-            {{-- ===== ZIP INFO STATS ===== --}}
-            <div class="section-title"><i class="bi bi-archive"></i> Informations de l'archive</div>
+            <!-- Stats Grid -->
             <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon orange"><i class="bi bi-file-earmark-zip"></i></div>
-                    <div class="stat-value">{{ $zip_filename }}</div>
-                    <div class="stat-label">Archive analys&eacute;e</div>
+                <div class="stat-tile" data-count="{{ $zip_info['total_files'] ?? 0 }}">
+                    <div class="stat-icon" style="background: #eef2ff; color:#4f46e5;"><i class="bi bi-files"></i></div>
+                    <div class="stat-value" id="statTotalFiles">0</div>
+                    <div class="stat-label">Fichiers dans le ZIP</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon blue"><i class="bi bi-file-earmark-text"></i></div>
-                    <div class="stat-value">{{ $zip_info['total_files'] ?? 0 }}</div>
-                    <div class="stat-label">Fichiers extraits</div>
-                    <div class="stat-detail">
-                        {{ $zip_info['text_code_files'] ?? 0 }} texte/code &bull;
-                        {{ $zip_info['image_files'] ?? 0 }} image(s)
-                    </div>
+                <div class="stat-tile" data-count="{{ $zip_info['text_code_files'] ?? 0 }}">
+                    <div class="stat-icon" style="background: #ecfdf5; color:#10b981;"><i class="bi bi-file-code"></i></div>
+                    <div class="stat-value" id="statTextFiles">0</div>
+                    <div class="stat-label">Fichiers texte / code</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon purple"><i class="bi bi-arrow-left-right"></i></div>
-                    <div class="stat-value">{{ $cross_analysis['pairs_compared'] ?? 0 }}</div>
-                    <div class="stat-label">Paires crois&eacute;es</div>
-                    <div class="stat-detail">Comparaison entre fichiers du ZIP</div>
+                <div class="stat-tile" data-count="{{ $cross_analysis['pairs_compared'] ?? 0 }}">
+                    <div class="stat-icon" style="background: #fff7ed; color:#f97316;"><i class="bi bi-arrow-left-right"></i></div>
+                    <div class="stat-value" id="statPairs">0</div>
+                    <div class="stat-label">Paires comparées (interne)</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon green"><i class="bi bi-database"></i></div>
-                    <div class="stat-value">{{ $per_file_analysis['files_analyzed'] ?? 0 }}</div>
+                <div class="stat-tile" data-count="{{ $per_file_analysis['files_analyzed'] ?? 0 }}">
+                    <div class="stat-icon" style="background: #f3e8ff; color:#7c3aed;"><i class="bi bi-database"></i></div>
+                    <div class="stat-value" id="statFilesVsBase">0</div>
                     <div class="stat-label">Fichiers vs Base</div>
-                    <div class="stat-detail">Comparaison individuelle avec la base</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon cyan"><i class="bi bi-images"></i></div>
-                    <div class="stat-value">{{ $image_analysis['images_in_zip'] ?? 0 }}</div>
-                    <div class="stat-label">Images dans le ZIP</div>
-                    <div class="stat-detail">{{ $image_analysis['matches_found'] ?? 0 }} correspondance(s) trouv&eacute;e(s)</div>
+                <div class="stat-tile" data-count="{{ $image_analysis['images_in_zip'] ?? 0 }}">
+                    <div class="stat-icon" style="background: #ffe4e6; color:#ec4899;"><i class="bi bi-image"></i></div>
+                    <div class="stat-value" id="statImages">0</div>
+                    <div class="stat-label">Images extraites</div>
                 </div>
             </div>
 
-            {{-- ===== FILES TABLE ===== --}}
-            <div class="section-title"><i class="bi bi-list-ul"></i> Fichiers extraits de l'archive</div>
-            <div class="file-table-wrap">
+            <!-- Global score + mini summary -->
+            <div class="score-panel">
+                <div class="score-ring-box">
+                    <div class="score-ring-svg">
+                        @php
+                            $overall = $overall_score ?? 0;
+                            $circumference = 2 * pi() * 88;
+                            $offset = $circumference - ($overall * $circumference);
+                            $scoreColor = $overall >= 0.6 ? '#ef4444' : ($overall >= 0.4 ? '#f59e0b' : '#10b981');
+                        @endphp
+                        <svg viewBox="0 0 200 200">
+                            <circle class="ring-bg" cx="100" cy="100" r="88" />
+                            <circle class="ring-progress" cx="100" cy="100" r="88"
+                                    style="stroke: {{ $scoreColor }}; stroke-dasharray: {{ $circumference }}; stroke-dashoffset: {{ $circumference }};"
+                                    data-target="{{ $offset }}" />
+                        </svg>
+                        <div class="score-center-text">
+                            <div class="score-percent" style="color: {{ $scoreColor }};" id="globalPercent">0</div>
+                            <div style="font-size: 0.7rem;">similarité max</div>
+                        </div>
+                    </div>
+                    @if($plagiarism_detected)
+                        <div class="plagiarism-alert"><i class="bi bi-exclamation-triangle-fill"></i> Plagiat détecté</div>
+                    @else
+                        <div class="plagiarism-alert success"><i class="bi bi-check-circle-fill"></i> Aucun plagiat significatif</div>
+                    @endif
+                </div>
+                <div class="score-summary">
+                    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                        @php
+                            $levels = ['critical' => 'Critique', 'high' => 'Élevé', 'medium' => 'Moyen', 'low' => 'Faible'];
+                            $summary = $cross_analysis['summary'] ?? ['critical'=>0,'high'=>0,'medium'=>0,'low'=>0];
+                        @endphp
+                        @foreach($levels as $key => $label)
+                            <div>
+                                <span class="level-badge level-{{ $key }}">{{ $label }}</span>
+                                <div class="stat-value" style="font-size: 1.4rem;" id="summary-{{ $key }}">0</div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge bg-secondary bg-opacity-25 p-2">Score croisé max : {{ round(($cross_analysis['max_score'] ?? 0)*100,1) }}%</span>
+                        <span class="badge bg-secondary bg-opacity-25 p-2 ms-2">Base max : {{ round(($per_file_analysis['max_score'] ?? 0)*100,1) }}%</span>
+                        <span class="badge bg-secondary bg-opacity-25 p-2 ms-2">Images max : {{ round(($image_analysis['max_score'] ?? 0)*100,1) }}%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fichiers extraits (tableau) -->
+            <div class="file-table-wrapper">
                 <table class="file-table">
                     <thead>
-                        <tr>
-                            <th style="width:40px;">#</th>
-                            <th>Fichier</th>
-                            <th>Type</th>
-                            <th>Extension</th>
-                            <th>Taille</th>
-                            <th>Images</th>
-                        </tr>
+                        <tr><th>#</th><th>Nom du fichier</th><th>Type</th><th>Extension</th><th>Taille</th><th>Images incluses</th></tr>
                     </thead>
                     <tbody>
                         @foreach($files_extracted as $idx => $f)
-                            @php
-                                $fType = $f['file_type'] ?? 'text';
-                                $fIcon = match($fType) {
-                                    'code' => 'code',
-                                    'image' => 'image',
-                                    default => 'text'
-                                };
-                                $fExt = $f['extension'] ?? '';
-                                if ($fExt === 'pdf') $fIcon = 'pdf';
-                                if ($fExt === 'docx') $fIcon = 'docx';
-                            @endphp
-                            <tr>
-                                <td style="color: var(--muted); font-weight: 600;">{{ $idx + 1 }}</td>
-                                <td>
-                                    <div style="display:flex; align-items:center; gap:0.6rem;">
-                                        <div class="file-icon-mini {{ $fIcon }}"><i class="bi {{ match($fIcon) { 'code' => 'bi-code-slash', 'image' => 'bi-image', 'pdf' => 'bi-filetype-pdf', 'docx' => 'bi-filetype-docx', default => 'bi-file-text' } }}"></i></div>
-                                        <strong style="font-size:0.85rem;">{{ $f['filename'] ?? 'inconnu' }}</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="level-badge {{ $fType === 'code' ? 'low' : 'none' }}" style="font-size:0.6rem;">
-                                        {{ $fType === 'code' ? 'Code' : ($fType === 'image' ? 'Image' : 'Texte') }}
-                                    </span>
-                                </td>
-                                <td><span class="ext-badge">{{ $fExt }}</span></td>
-                                <td style="color: var(--text-secondary); font-size: 0.82rem;">
-                                    {{ number_format(($f['content_length'] ?? 0) / 1024, 1) }} Ko
-                                </td>
-                                <td style="text-align:center;">
-                                    @if(($f['images_count'] ?? 0) > 0)
-                                        <span class="extraction-tag img"><i class="bi bi-image"></i> {{ $f['images_count'] }}</span>
-                                    @else
-                                        <span style="color: var(--muted);">&mdash;</span>
-                                    @endif
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>{{ $idx+1 }}</td>
+                            <td><i class="bi bi-file-earmark-text me-2"></i>{{ $f['filename'] }}</td>
+                            <td><span class="badge bg-secondary bg-opacity-25">{{ $f['file_type'] }}</span></td>
+                            <td>{{ $f['extension'] }}</td>
+                            <td>{{ number_format($f['content_length']/1024,1) }} Ko</td>
+                            <td>{{ $f['images_count'] ?? 0 }}</td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
 
-            <hr class="section-divider">
-
-            {{-- ===== SCORE GLOBAL ===== --}}
-            <div class="section-title"><i class="bi bi-speedometer2"></i> Score global de l'archive</div>
-            <div class="score-section">
-                <div style="text-align: center;">
-                    @php
-                        $circumference = 2 * pi() * 80;
-                        $offset = $circumference - ($overall_score * $circumference);
-                        $scoreColor = $overall_score >= 0.6 ? '#ef4444' : ($overall_score >= 0.4 ? '#f59e0b' : '#10b981');
-                    @endphp
-                    <div class="score-ring">
-                        <svg viewBox="0 0 180 180">
-                            <circle class="track" cx="90" cy="90" r="80" />
-                            <circle class="progress-arc" cx="90" cy="90" r="80"
-                                    style="stroke: {{ $scoreColor }}; stroke-dashoffset: {{ $offset }};"
-                                    data-target="{{ $offset }}" />
-                        </svg>
-                        <div class="score-text">
-                            <div class="score-number" style="color: {{ $scoreColor }};">{{ round($overall_score * 100) }}</div>
-                            <div class="score-unit">% de similarit&eacute;</div>
-                        </div>
-                    </div>
-                    <div class="score-label">Score global du ZIP</div>
-                    @if($plagiarism_detected)
-                        <div class="alert-plagiat danger">
-                            <i class="bi bi-exclamation-triangle-fill"></i> Plagiat d&eacute;tect&eacute; dans l'archive
-                        </div>
-                    @else
-                        <div class="alert-plagiat success">
-                            <i class="bi bi-check-circle-fill"></i> Aucun plagiat significatif
-                        </div>
-                    @endif
-                </div>
-                <div>
-                    @php
-                        $levelLabels = ['critical' => 'Critique', 'high' => 'Elev\u00e9', 'medium' => 'Moyen', 'low' => 'Faible'];
-                    @endphp
-                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 1rem;">
-                        R&eacute;sum&eacute; par source de d&eacute;tection
-                    </div>
-                    <div class="row g-2 mb-3">
-                        <div class="col-4">
-                            <div style="text-align:center; padding:1rem; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-xl);">
-                                <div style="font-size:0.65rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em;">Crois&eacute; ZIP</div>
-                                <div style="font-size:1.3rem; font-weight:800; margin-top:0.3rem; color:{{ ($cross_analysis['max_score'] ?? 0) >= 0.5 ? 'var(--danger)' : 'var(--success)' }};">
-                                    {{ round(($cross_analysis['max_score'] ?? 0) * 100, 1) }}%
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div style="text-align:center; padding:1rem; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-xl);">
-                                <div style="font-size:0.65rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em;">Base</div>
-                                <div style="font-size:1.3rem; font-weight:800; margin-top:0.3rem; color:{{ ($per_file_analysis['max_score'] ?? 0) >= 0.5 ? 'var(--danger)' : 'var(--success)' }};">
-                                    {{ round(($per_file_analysis['max_score'] ?? 0) * 100, 1) }}%
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div style="text-align:center; padding:1rem; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-xl);">
-                                <div style="font-size:0.65rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em;">Images</div>
-                                <div style="font-size:1.3rem; font-weight:800; margin-top:0.3rem; color:{{ ($image_analysis['max_score'] ?? 0) >= 0.5 ? 'var(--danger)' : 'var(--success)' }};">
-                                    {{ round(($image_analysis['max_score'] ?? 0) * 100, 1) }}%
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Summary from cross analysis --}}
-                    @if(isset($cross_analysis['summary']))
-                        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;">
-                            @foreach($cross_analysis['summary'] as $lvl => $cnt)
-                                @if($cnt > 0)
-                                    <span class="level-badge {{ $lvl }}">{{ $cnt }} {{ $levelLabels[$lvl] ?? ucfirst($lvl) }}</span>
-                                @endif
-                            @endforeach
-                        </div>
-                    @endif
-                    <div style="margin-top:1rem; padding:0.75rem 1rem; background:white; border-radius:var(--radius-xl); border:1px solid var(--border); font-size:0.78rem; color:var(--text-secondary);">
-                        <i class="bi bi-info-circle me-1" style="color:var(--accent);"></i>
-                        Le score global est le <strong>maximum</strong> entre les 3 sources : croisement interne, base de donn&eacute;es, et images.
-                        Niveau global :
-                        <span class="level-badge {{ $overall_level ?? 'none' }}">{{ $levelLabels[$overall_level] ?? ucfirst($overall_level) }}</span>
-                    </div>
+            <!-- Tabs navigation -->
+            <div class="tabs-container">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-tab="cross"><i class="bi bi-arrow-left-right"></i> Croisement ZIP <span class="badge bg-light text-dark ms-1" id="badgeCrossCount">{{ count($cross_matches) }}</span></button>
+                    <button class="tab-btn" data-tab="base"><i class="bi bi-database"></i> Base de référence <span class="badge bg-light text-dark ms-1" id="badgeBaseCount">{{ count($per_file_results) }}</span></button>
+                    <button class="tab-btn" data-tab="images"><i class="bi bi-image"></i> Images <span class="badge bg-light text-dark ms-1" id="badgeImgCount">{{ count($image_matches) }}</span></button>
                 </div>
             </div>
 
-            <hr class="section-divider">
-
-            {{-- ===== ANALYSIS TABS ===== --}}
-            <div class="analysis-tabs">
-                <button class="analysis-tab active" onclick="switchTab('cross', this)">
-                    <i class="bi bi-arrow-left-right"></i> Crois&eacute; interne
-                    <span class="tab-count">{{ $cross_analysis['matches_found'] ?? 0 }}</span>
-                </button>
-                <button class="analysis-tab" onclick="switchTab('perfile', this)">
-                    <i class="bi bi-file-earmark-break"></i> Par fichier vs Base
-                    <span class="tab-count">{{ $per_file_analysis['files_analyzed'] ?? 0 }}</span>
-                </button>
-                <button class="analysis-tab" onclick="switchTab('images', this)">
-                    <i class="bi bi-image"></i> Images
-                    <span class="tab-count">{{ $image_analysis['matches_found'] ?? 0 }}</span>
-                </button>
-            </div>
-
-            {{-- ===== TAB 1: CROSS FILE ANALYSIS ===== --}}
+            <!-- Tab 1 : Cross file matches -->
             <div class="tab-content active" id="tab-cross">
                 @if(count($cross_matches) > 0)
-                    <div class="section-title" style="font-size:0.9rem;"><i class="bi bi-arrow-left-right"></i> Comparaison crois&eacute;e entre fichiers du ZIP</div>
-                    @foreach($cross_matches as $cm)
-                        @php
-                            $cmScore = round(($cm['combined_score'] ?? 0) * 100, 1);
-                            $cmLevel = $cm['level'] ?? 'none';
-                            $cmColor = match($cmLevel) {
-                                'critical' => '#ef4444',
-                                'high' => '#f97316',
-                                'medium' => '#f59e0b',
-                                default => '#94a3b8'
-                            };
-                        @endphp
-                        <div class="cross-card">
-                            <div class="cross-accent" style="background: {{ $cmColor }};"></div>
-                            <div class="cross-header">
-                                <div class="cross-pair">
-                                    <div class="file-icon-mini code"><i class="bi bi-code-slash"></i></div>
-                                    <strong>{{ $cm['file_a'] ?? '?' }}</strong>
-                                    <i class="bi bi-arrow-left-right arrow-icon"></i>
-                                    <strong>{{ $cm['file_b'] ?? '?' }}</strong>
-                                    <span class="level-badge {{ $cmLevel }}">{{ $levelLabels[$cmLevel] ?? ucfirst($cmLevel) }}</span>
+                    <div style="padding: 0 2rem;">
+                        @foreach($cross_matches as $match)
+                            @php
+                                $score = round($match['combined_score']*100,1);
+                                $level = $match['level'];
+                            @endphp
+                            <div class="match-card" style="border-left-color: {{ match($level){'critical'=>'#ef4444','high'=>'#f97316','medium'=>'#f59e0b',default=>'#94a3b8'} }}">
+                                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                                    <div>
+                                        <strong><i class="bi bi-file-text-fill"></i> {{ $match['file_a'] }}</strong>
+                                        <i class="bi bi-arrow-left-right mx-2"></i>
+                                        <strong><i class="bi bi-file-text-fill"></i> {{ $match['file_b'] }}</strong>
+                                        <span class="level-badge level-{{ $level }} ms-2">{{ ucfirst($level) }}</span>
+                                    </div>
+                                    <div class="fw-bold fs-4">{{ $score }}%</div>
                                 </div>
-                                <div class="cross-score-big" style="color: {{ $cmColor }};">{{ $cmScore }}%</div>
-                            </div>
-                            <div class="cross-progress">
-                                <div class="progress-track">
-                                    <div class="progress-fill" style="width: {{ $cmScore }}%; background: {{ $cmColor }};"></div>
+                                <div class="progress mt-2" style="height: 6px;">
+                                    <div class="progress-bar" style="width: {{ $score }}%; background: {{ match($level){'critical'=>'#ef4444','high'=>'#f97316','medium'=>'#f59e0b',default=>'#94a3b8'} }}; transition: width 0.6s;"></div>
                                 </div>
-                            </div>
-                            {{-- Engine details --}}
-                            @if(isset($cm['engines']) && count($cm['engines']) > 0)
-                                <div class="engine-details">
-                                    <button class="engine-toggle" onclick="toggleEngine(this)">
-                                        <i class="bi bi-chevron-down"></i> D&eacute;tails par moteur ({{ count($cm['engines']) }})
+                                @if(isset($match['engines']))
+                                    <button class="btn btn-sm btn-link p-0 mt-2 text-muted" onclick="toggleEngine(this)">
+                                        <i class="bi bi-chevron-down"></i> Détails des moteurs
                                     </button>
-                                    <div class="engine-table-wrap">
-                                        <table class="engine-table">
+                                    <div class="engine-details d-none mt-2 small">
+                                        <table class="table table-sm">
                                             <thead>
-                                                <tr><th>Moteur</th><th>Score brut</th><th>Poids</th><th>Contribution</th><th style="width:100px;">Visuel</th></tr>
+                                                <tr><th>Moteur</th><th>Raw</th><th>Poids</th><th>Contribution</th></tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($cm['engines'] as $eName => $eData)
-                                                    @php $contribPct = ($eData['contribution'] ?? 0) * 100; @endphp
-                                                    <tr>
-                                                        <td><span class="engine-pill">{{ strtoupper($eName) }}</span></td>
-                                                        <td>{{ round($eData['raw'] ?? 0, 4) }}</td>
-                                                        <td>{{ $eData['weight'] ?? 0 }}</td>
-                                                        <td>{{ round($eData['contribution'] ?? 0, 4) }}</td>
-                                                        <td>
-                                                            <div class="mini-progress">
-                                                                <div class="fill" style="width: {{ min($contribPct, 100) }}%;"></div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                @foreach($match['engines'] as $e => $d)
+                                                <tr>
+                                                    <td>{{ strtoupper($e) }}</td>
+                                                    <td>{{ round($d['raw']??0,3) }}</td>
+                                                    <td>{{ $d['weight']??0 }}</td>
+                                                    <td>{{ round($d['contribution']??0,4) }}</td>
+                                                </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
-                @else
-                    <div class="no-matches">
-                        <div class="icon-circle"><i class="bi bi-check-lg"></i></div>
-                        <h4>Aucune similarit&eacute; crois&eacute;e</h4>
-                        <p>Les fichiers du ZIP ne se ressemblent pas entre eux. Aucun copiage interne d&eacute;tect&eacute;.</p>
+                                @endif
+                            </div>
+                        @endforeach
                     </div>
+                @else
+                    <div class="alert alert-success mx-4 my-2 text-center">Aucune correspondance interne trouvée.</div>
                 @endif
             </div>
 
-            {{-- ===== TAB 2: PER-FILE DATABASE ANALYSIS ===== --}}
-            <div class="tab-content" id="tab-perfile">
-                <div class="section-title" style="font-size:0.9rem;"><i class="bi bi-file-earmark-break"></i> Analyse par fichier vs Base de donn&eacute;es</div>
+            <!-- Tab 2 : Per file vs database -->
+            <div class="tab-content" id="tab-base">
                 @if(count($per_file_results) > 0)
-                    @foreach($per_file_results as $pfr)
-                        @php
-                            $pfScore = round(($pfr['max_score'] ?? 0) * 100, 1);
-                            $pfLevel = $pfr['max_level'] ?? 'none';
-                            $pfColor = match($pfLevel) {
-                                'critical' => '#ef4444',
-                                'high' => '#f97316',
-                                'medium' => '#f59e0b',
-                                default => '#94a3b8'
-                            };
-                            $pfMatches = $pfr['matches'] ?? [];
-                        @endphp
-                        <div class="per-file-card">
-                            <div class="per-file-header" onclick="togglePerFile(this)">
-                                <div class="per-file-name">
-                                    <div class="file-icon-mini {{ $pfr['file_type'] ?? 'text' === 'code' ? 'code' : 'text' }}">
-                                        <i class="bi {{ ($pfr['file_type'] ?? 'text') === 'code' ? 'bi-code-slash' : 'bi-file-text' }}"></i>
-                                    </div>
+                    <div style="padding: 0 2rem;">
+                        @foreach($per_file_results as $pfr)
+                            <div class="card mb-3 border-0 shadow-sm">
+                                <div class="card-header bg-transparent d-flex justify-content-between align-items-center flex-wrap" style="cursor: pointer;" onclick="togglePerFile(this)">
+                                    <div><strong>{{ $pfr['filename'] }}</strong> <span class="badge bg-secondary">{{ $pfr['file_type'] }}</span></div>
                                     <div>
-                                        <strong>{{ $pfr['filename'] ?? 'inconnu' }}</strong>
-                                        <div style="font-size:0.72rem; color:var(--muted); margin-top:0.1rem;">
-                                            {{ $pfr['file_type'] ?? 'text' }}
-                                            @if(isset($pfr['content_length']))
-                                                &bull; {{ number_format($pfr['content_length'] / 1024, 1) }} Ko
-                                            @endif
-                                            @if(($pfr['best_match'] ?? null))
-                                                &bull; Meilleur match: <em>{{ $pfr['best_match'] }}</em>
-                                            @endif
-                                        </div>
+                                        <span class="level-badge level-{{ $pfr['max_level'] }}">{{ ucfirst($pfr['max_level']) }}</span>
+                                        <span class="fw-bold ms-2">{{ round($pfr['max_score']*100,1) }}%</span>
                                     </div>
                                 </div>
-                                <div class="per-file-score">
-                                    <span class="level-badge {{ $pfLevel }}">{{ $levelLabels[$pfLevel] ?? ucfirst($pfLevel) }}</span>
-                                    <div class="cross-score-big" style="color: {{ $pfColor }};">{{ $pfScore }}%</div>
-                                    <div class="progress-track" style="width:100px;">
-                                        <div class="progress-fill" style="width: {{ $pfScore }}%; background: {{ $pfColor }};"></div>
+                                <div class="collapse-content" style="display: none;">
+                                    <div class="card-body">
+                                        @if(count($pfr['matches']) > 0)
+                                            @foreach($pfr['matches'] as $m)
+                                                <div class="border-bottom pb-2 mb-2">
+                                                    <div><i class="bi bi-file-text"></i> <strong>{{ $m['filename'] }}</strong> (ID: {{ $m['submission_id'] }})</div>
+                                                    <div class="progress mt-1" style="height: 4px;"><div class="progress-bar bg-primary" style="width: {{ $m['combined_score']*100 }}%"></div></div>
+                                                    <span class="badge bg-secondary">{{ round($m['combined_score']*100,1) }}%</span>
+                                                    @if(isset($m['engines']))
+                                                        <button class="btn btn-sm btn-link p-0 mt-1" onclick="toggleEngine(this)">Détails moteurs</button>
+                                                        <div class="engine-details d-none small">@foreach($m['engines'] as $en=>$ed) <span class="badge bg-light">{{ strtoupper($en) }}:{{ round($ed['raw']??0,2) }}</span> @endforeach</div>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p class="text-muted">Aucune correspondance trouvée.</p>
+                                        @endif
                                     </div>
-                                    <i class="bi bi-chevron-down toggle-arrow" style="color:var(--muted); transition:transform 0.3s;"></i>
                                 </div>
                             </div>
-                            {{-- Expandable matches --}}
-                            <div class="per-file-matches-wrap">
-                                <div class="per-file-matches-inner">
-                                    @if(count($pfMatches) > 0)
-                                        <div style="font-size:0.72rem; font-weight:600; color:var(--muted); margin-bottom:0.5rem;">
-                                            {{ count($pfMatches) }} correspondance(s) trouv&eacute;e(s) dans la base
-                                        </div>
-                                        @foreach($pfMatches as $pfm)
-                                            @php
-                                                $pfmScore = round(($pfm['combined_score'] ?? 0) * 100, 1);
-                                                $pfmLevel = $pfm['level'] ?? 'none';
-                                                $pfmColor = match($pfmLevel) {
-                                                    'critical' => '#ef4444',
-                                                    'high' => '#f97316',
-                                                    'medium' => '#f59e0b',
-                                                    default => '#94a3b8'
-                                                };
-                                            @endphp
-                                            <div class="per-file-match-row">
-                                                <div style="width:36px; height:36px; border-radius:8px; background:{{ $pfmColor }}15; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                                                    <i class="bi bi-file-text" style="color:{{ $pfmColor }};"></i>
-                                                </div>
-                                                <div style="flex:1; min-width:0;">
-                                                    <strong style="font-size:0.82rem;">{{ $pfm['filename'] ?? '?' }}</strong>
-                                                    <div style="font-size:0.7rem; color:var(--muted);">
-                                                        ID: {{ $pfm['submission_id'] ?? 'N/A' }}
-                                                        @if(isset($pfm['file_type']))
-                                                            &bull; {{ $pfm['file_type'] }}
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <div style="display:flex; align-items:center; gap:0.5rem;">
-                                                    <span class="level-badge {{ $pfmLevel }}" style="font-size:0.58rem;">
-                                                        {{ $levelLabels[$pfmLevel] ?? ucfirst($pfmLevel) }}
-                                                    </span>
-                                                    <strong style="color:{{ $pfmColor }}; font-size:1rem;">{{ $pfmScore }}%</strong>
-                                                </div>
-                                            </div>
-                                            {{-- Engine details for this match --}}
-                                            @if(isset($pfm['engines']) && count($pfm['engines']) > 0)
-                                                <div class="engine-details" style="padding-left:3.5rem;">
-                                                    <button class="engine-toggle" onclick="toggleEngine(this)">
-                                                        <i class="bi bi-chevron-down"></i> Moteurs
-                                                    </button>
-                                                    <div class="engine-table-wrap">
-                                                        <table class="engine-table">
-                                                            <thead><tr><th>Moteur</th><th>Brut</th><th>Poids</th><th>Contrib.</th></tr></thead>
-                                                            <tbody>
-                                                                @foreach($pfm['engines'] as $en => $ed)
-                                                                    <tr>
-                                                                        <td><span class="engine-pill">{{ strtoupper($en) }}</span></td>
-                                                                        <td>{{ round($ed['raw'] ?? 0, 4) }}</td>
-                                                                        <td>{{ $ed['weight'] ?? 0 }}</td>
-                                                                        <td>{{ round($ed['contribution'] ?? 0, 4) }}</td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                    @else
-                                        <div style="text-align:center; padding:1.5rem; color:var(--muted); font-size:0.82rem;">
-                                            <i class="bi bi-check-circle me-1"></i> Aucune correspondance pour ce fichier
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <div class="no-matches">
-                        <div class="icon-circle"><i class="bi bi-check-lg"></i></div>
-                        <h4>Aucune comparaison effectu&eacute;e</h4>
-                        <p>Aucun fichier texte/code n'a pu &ecirc;tre analys&eacute; ou la base est vide.</p>
+                        @endforeach
                     </div>
+                @else
+                    <div class="alert alert-success mx-4 my-2 text-center">Aucune analyse par fichier disponible.</div>
                 @endif
             </div>
 
-            {{-- ===== TAB 3: IMAGE ANALYSIS ===== --}}
+            <!-- Tab 3 : Images -->
             <div class="tab-content" id="tab-images">
-                <div class="image-analysis-section">
-                    <h5><i class="bi bi-image"></i> Analyse d'images du ZIP</h5>
-                    @if(isset($image_analysis['analyzed']) && $image_analysis['analyzed'])
-                        <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem; font-size:0.78rem; color:var(--text-secondary);">
-                            <span><i class="bi bi-collection-image me-1"></i> {{ $image_analysis['images_in_zip'] ?? 0 }} image(s) dans le ZIP</span>
-                            <span><i class="bi bi-database me-1"></i> {{ $image_analysis['images_in_database'] ?? 0 }} image(s) en base</span>
-                            <span><i class="bi bi-link-45deg me-1"></i> {{ $image_analysis['matches_found'] ?? 0 }} correspondance(s)</span>
-                        </div>
-                        @if(count($image_matches) > 0)
-                            @foreach($image_matches as $imgM)
-                                @php
-                                    $iConf = ($imgM['confidence'] ?? 0) * 100;
-                                    $iColor = $iConf >= 80 ? '#dc2626' : ($iConf >= 60 ? '#f97316' : '#3b82f6');
-                                @endphp
-                                <div class="img-match-card">
-                                    <div class="img-icon"><i class="bi bi-images"></i></div>
-                                    <div class="img-info">
-                                        <strong>Image #{{ ($imgM['new_image_index'] ?? 0) + 1 }}</strong><br>
-                                        <small>
-                                            vs {{ $imgM['matched_filename'] ?? 'R\u00e9f\u00e9rence' }}
-                                            @if(isset($imgM['source']) && $imgM['source'] === 'cross_zip')
-                                                <span class="extraction-tag zip" style="font-size:0.58rem;"><i class="bi bi-zip"></i> Interne ZIP</span>
-                                            @endif
-                                            @if(isset($imgM['phash_distance']))
-                                                &bull; pHash: {{ $imgM['phash_distance'] }}
-                                            @endif
-                                            @if(isset($imgM['feature_similarity']) && $imgM['feature_similarity'] !== null)
-                                                &bull; Sim: {{ round(($imgM['feature_similarity']) * 100, 1) }}%
-                                            @endif
-                                        </small>
+                @if(count($image_matches) > 0)
+                    <div style="padding: 0 2rem;">
+                        <div class="row g-3">
+                            @foreach($image_matches as $img)
+                                <div class="col-md-6">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <span><i class="bi bi-image-fill"></i> Image #{{ $img['new_image_index']+1 }}</span>
+                                                <span class="level-badge level-{{ $img['level'] }}">{{ ucfirst($img['level']) }}</span>
+                                            </div>
+                                            <div class="mt-2">Confiance : <strong>{{ round($img['confidence']*100,1) }}%</strong></div>
+                                            <div class="progress mt-1"><div class="progress-bar" style="width: {{ $img['confidence']*100 }}%"></div></div>
+                                            <div class="small text-muted mt-2">vs {{ $img['matched_filename'] }}</div>
+                                        </div>
                                     </div>
-                                    <span class="img-score-badge" style="background: {{ $iColor }};">
-                                        {{ round($iConf, 1) }}%
-                                    </span>
                                 </div>
                             @endforeach
-                        @else
-                            <p style="margin:0; font-size:0.82rem; color:var(--muted);">
-                                <i class="bi bi-check-circle me-1"></i> Aucune similarit&eacute; d'image d&eacute;tect&eacute;e.
-                            </p>
-                        @endif
-                    @else
-                        <p style="margin:0; font-size:0.82rem; color:var(--muted);">
-                            <i class="bi bi-slash-circle me-1"></i> Analyse d'images non effectu&eacute;e (aucune image ou base vide).
-                        </p>
-                    @endif
-                </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="alert alert-info mx-4 my-2 text-center">Aucune similarité d'image détectée.</div>
+                @endif
             </div>
 
-            <hr class="section-divider">
-
-            {{-- ===== RAW JSON ===== --}}
-            <div class="raw-json-section">
-                <button class="raw-json-toggle" onclick="toggleRawJson(this)">
-                    <i class="bi bi-code-square"></i> Afficher le JSON brut de la r&eacute;ponse API
-                </button>
-                <div class="raw-json-wrap">
-                    <pre class="raw-json-pre">{{ json_encode($raw_response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+            <!-- Actions -->
+            <div class="action-bar">
+                <div>
+                    <a href="{{ route('upload.index') }}" class="btn-glass"><i class="bi bi-plus-circle"></i> Nouvelle analyse</a>
+                    <a href="{{ route('upload.index') }}" class="btn-glass ms-2"><i class="bi bi-file-zip"></i> Analyser un autre ZIP</a>
                 </div>
+                <button class="btn-glass" onclick="window.print()"><i class="bi bi-printer"></i> Imprimer le rapport</button>
             </div>
-
-            {{-- ===== ACTIONS ===== --}}
-            <div class="actions-bar">
-                <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-                    <a href="{{ url('/') }}" class="btn-primary-custom">
-                        <i class="bi bi-plus-circle"></i> Nouvelle analyse
-                    </a>
-                    <a href="{{ url('/upload') }}" class="btn-outline-custom">
-                        <i class="bi bi-cloud-upload"></i> Uploader un fichier
-                    </a>
-                </div>
-                <button class="btn-outline-custom" onclick="window.print()">
-                    <i class="bi bi-printer"></i> Imprimer
-                </button>
-            </div>
-
-            <div style="text-align:center; margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border); font-size:0.75rem; color:var(--muted);">
-                <i class="bi bi-shield-check me-1"></i> PlagioScan &mdash; Rapport g&eacute;n&eacute;r&eacute; le {{ now()->format('d/m/Y \&agrave; H:i') }}
+            <div class="report-footer">
+                <i class="bi bi-shield-check"></i> Rapport généré par PlagioScan – Moteurs : TF‑IDF, BERT, Winnowing, LCS, pHash
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Tab switching
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.analysis-tab').forEach(el => el.classList.remove('active'));
-            document.getElementById('tab-' + tabId).classList.add('active');
-            btn.classList.add('active');
-        }
+        (function() {
+            // Theme toggle
+            const themeBtn = document.getElementById('themeToggle');
+            themeBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark');
+                const isDark = document.body.classList.contains('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
+            });
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark');
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+            }
 
-        // Engine detail toggle
+            // Animated counters
+            function animateNumber(element, target) {
+                let current = 0;
+                const step = Math.ceil(target / 60);
+                const interval = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        element.innerText = target;
+                        clearInterval(interval);
+                    } else {
+                        element.innerText = current;
+                    }
+                }, 16);
+            }
+            // Stats tiles
+            document.querySelectorAll('.stat-tile[data-count]').forEach(tile => {
+                const val = parseInt(tile.getAttribute('data-count'));
+                const targetSpan = tile.querySelector('.stat-value');
+                if (targetSpan && val) animateNumber(targetSpan, val);
+            });
+            // Summary levels
+            const summaryData = @json($summary);
+            if (summaryData) {
+                if(summaryData.critical) animateNumber(document.getElementById('summary-critical'), summaryData.critical);
+                if(summaryData.high) animateNumber(document.getElementById('summary-high'), summaryData.high);
+                if(summaryData.medium) animateNumber(document.getElementById('summary-medium'), summaryData.medium);
+                if(summaryData.low) animateNumber(document.getElementById('summary-low'), summaryData.low);
+            }
+            // Global score percent
+            const globalPercent = {{ round($overall_score * 100) }};
+            animateNumber(document.getElementById('globalPercent'), globalPercent);
+            // Stat total files
+            animateNumber(document.getElementById('statTotalFiles'), {{ $zip_info['total_files'] ?? 0 }});
+            animateNumber(document.getElementById('statTextFiles'), {{ $zip_info['text_code_files'] ?? 0 }});
+            animateNumber(document.getElementById('statPairs'), {{ $cross_analysis['pairs_compared'] ?? 0 }});
+            animateNumber(document.getElementById('statFilesVsBase'), {{ $per_file_analysis['files_analyzed'] ?? 0 }});
+            animateNumber(document.getElementById('statImages'), {{ $image_analysis['images_in_zip'] ?? 0 }});
+
+            // Ring animation
+            const ring = document.querySelector('.ring-progress');
+            if (ring) {
+                setTimeout(() => {
+                    ring.style.strokeDashoffset = ring.dataset.target;
+                }, 200);
+            }
+
+            // Tabs
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetTab = btn.dataset.tab;
+                    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                    document.getElementById(`tab-${targetTab}`).classList.add('active');
+                    tabs.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+        })();
+
         function toggleEngine(btn) {
-            btn.classList.toggle('active');
-            const wrap = btn.nextElementSibling;
-            wrap.classList.toggle('open');
+            const details = btn.nextElementSibling;
+            details.classList.toggle('d-none');
+            btn.querySelector('i').classList.toggle('bi-chevron-down');
+            btn.querySelector('i').classList.toggle('bi-chevron-up');
         }
-
-        // Per-file expand toggle
         function togglePerFile(header) {
-            const card = header.closest('.per-file-card');
-            const matchesWrap = card.querySelector('.per-file-matches-wrap');
-            const arrow = card.querySelector('.toggle-arrow');
-            matchesWrap.classList.toggle('open');
-            if (matchesWrap.classList.contains('open')) {
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
-                arrow.style.transform = 'rotate(0deg)';
-            }
-        }
-
-        // Raw JSON toggle
-        function toggleRawJson(btn) {
-            const wrap = btn.nextElementSibling;
-            wrap.classList.toggle('open');
-            const icon = btn.querySelector('i');
-            if (wrap.classList.contains('open')) {
-                icon.className = 'bi bi-code-square';
-            } else {
-                icon.className = 'bi bi-code-square';
-            }
+            const content = header.parentElement.querySelector('.collapse-content');
+            if (content) content.style.display = content.style.display === 'none' ? 'block' : 'none';
         }
     </script>
 </body>
